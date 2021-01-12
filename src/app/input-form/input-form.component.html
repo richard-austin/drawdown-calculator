@@ -1,1 +1,25 @@
-<p>input-form works!</p>
+<mat-card>
+  <mat-card-title>Pension Drawdown Calculator
+    <!-- <mat-card-subtitle>Enter data</mat-card-subtitle> -->
+  </mat-card-title>
+  <mat-card-content>
+    <form (submit)="$event.preventDefault(); formSubmitted()">
+      <mat-form-field>
+        <mat-label>
+          Fund Amount
+        </mat-label>
+        <input matInput #fundAmount>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>
+          Annual Drawdown Amount
+        </mat-label>
+        <input matInput #drawdownAmount>
+      </mat-form-field>
+      <mat-card-actions>
+        <button mat-flat-button color="primary">Calculate</button>
+        <button type="button" (click)="cancel()" mat-flat-button>Cancel</button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>
