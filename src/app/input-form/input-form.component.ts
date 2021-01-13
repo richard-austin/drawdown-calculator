@@ -19,6 +19,7 @@ export class InputFormComponent implements OnInit {
   requiredAnnualIncomeGrowth!: number;
 
   drawdownData: YearTotal[] = [];
+  displayedColumns: string[] = ['yearNum', 'remainingFunds', 'annualIncome'];
 
   constructor() { }
 
