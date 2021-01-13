@@ -8,6 +8,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {MatTableModule} from "@angular/material/table";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 
@@ -23,8 +24,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     MatFormFieldModule,
     MatCardModule,
     MatButtonModule,
-    MatInputModule
-  ],
+    MatInputModule,
+    MatTableModule],
   providers: [],
   bootstrap: [AppComponent]
 })
