@@ -1,0 +1,38 @@
+<mat-card>
+  <mat-card-title>Pension Drawdown Calculator
+    <!-- <mat-card-subtitle>Enter data</mat-card-subtitle> -->
+  </mat-card-title>
+  <div class="flex-container">
+    <mat-card-content>
+      <form (submit)="$event.preventDefault(); formSubmitted()">
+        <mat-form-field>
+          <mat-label>
+            Fund Amount
+          </mat-label>
+          <input matInput #fundAmount>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <mat-label>
+            Required Annual Drawdown Amount
+          </mat-label>
+          <input matInput #drawdownAmount>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <mat-label>
+            Expected Average Annual Fund Growth (%)
+          </mat-label>
+          <input matInput #expectedAnnualFundGrowth>
+        </mat-form-field>
+        <mat-card-actions>
+          <button mat-flat-button color="primary">Calculate</button>
+          <button type="button" (click)="cancel()" mat-flat-button>Cancel</button>
+        </mat-card-actions>
+      </form>
+    </mat-card-content>
+    <mat-card-content class="table-container">
+      Hello
+    </mat-card-content>
+  </div>
+</mat-card>
