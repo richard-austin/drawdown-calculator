@@ -6,4 +6,5 @@ export class YearTotal
   
     yearNum!: number;
     remainingFunds!: number;
+    annualIncome!: number;
 }

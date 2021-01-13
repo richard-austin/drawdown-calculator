@@ -11,10 +11,12 @@ export class InputFormComponent implements OnInit {
   @ViewChild('fundAmount', { read: ElementRef }) fundAmountEl!: ElementRef<HTMLInputElement>;
   @ViewChild('drawdownAmount', { read: ElementRef }) drawdownAmountEl!: ElementRef<HTMLInputElement>;
   @ViewChild('expectedAnnualFundGrowth', { read: ElementRef }) expectedAnnualFundGrowthEL!: ElementRef<HTMLInputElement>;
+  @ViewChild('requiredAnnualIncomeGrowth', { read: ElementRef }) requiredAnnualIncomeGrowthEL!: ElementRef<HTMLInputElement>;
 
   fundAmount!: number;
   drawdownAmount!: number;
   expectedAnnualFundGrowth!: number;
+  requiredAnnualIncomeGrowth!: number;
 
   drawdownData: YearTotal[] = [];
 
@@ -28,6 +30,7 @@ export class InputFormComponent implements OnInit {
     this.fundAmount = parseInt(this.fundAmountEl?.nativeElement.value.toString())
     this.drawdownAmount = parseInt(this.drawdownAmountEl?.nativeElement.value.toString())
     this.expectedAnnualFundGrowth = parseInt(this.expectedAnnualFundGrowthEL?.nativeElement.value.toString())
+    this.requiredAnnualIncomeGrowth = parseInt(this.requiredAnnualIncomeGrowthEL?.nativeElement.value.toString())
     this.calculateDrawdown();
   }
 
@@ -39,11 +42,13 @@ export class InputFormComponent implements OnInit {
 
     for (let i = 0; i < 40; ++i) {
       if (this.fundAmount > 0)
-        this.drawdownData.push(new YearTotal({ yearNum: i, remainingFunds: this.fundAmount }));
+        this.drawdownData.push(new YearTotal({ yearNum: i, remainingFunds: this.fundAmount, annualIncome: this.drawdownAmount > this.fundAmount ? this.fundAmount: this.drawdownAmount }));
       else
-        this.drawdownData.push(new YearTotal({ yearNum: i, remainingFunds: 0 }));
+        this.drawdownData.push(new YearTotal({ yearNum: i, remainingFunds: 0, annualIncome: 0}));
 
       this.depreciateOneYear();
+
+      this.drawdownAmount += this.drawdownAmount * this.requiredAnnualIncomeGrowth / 100;
     }
 
     let x = 0;
