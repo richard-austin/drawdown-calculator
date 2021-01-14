@@ -19,19 +19,19 @@ export class InputFormComponent implements OnInit {
   requiredAnnualIncomeGrowth!: number;
 
   drawdownData: YearTotal[] = [];
-  displayedColumns: string[] = ['yearNum', 'remainingFunds', 'annualIncome'];
+  displayedColumns: string[] = ['yearNum', 'remainingFunds', 'annualIncome', 'yearNumRight', 'remainingFundsRight', 'annualIncomeRight'];
 
   constructor() { }
 
   cancel() {
-    //  Console.log("Cancelled");
+    this.drawdownData = [];
   }
 
   formSubmitted() {
     this.fundAmount = parseInt(this.fundAmountEl?.nativeElement.value.toString())
     this.drawdownAmount = parseInt(this.drawdownAmountEl?.nativeElement.value.toString())
-    this.expectedAnnualFundGrowth = parseInt(this.expectedAnnualFundGrowthEL?.nativeElement.value.toString())
-    this.requiredAnnualIncomeGrowth = parseInt(this.requiredAnnualIncomeGrowthEL?.nativeElement.value.toString())
+    this.expectedAnnualFundGrowth = parseFloat(this.expectedAnnualFundGrowthEL?.nativeElement.value.toString())
+    this.requiredAnnualIncomeGrowth = parseFloat(this.requiredAnnualIncomeGrowthEL?.nativeElement.value.toString())
     this.calculateDrawdown();
   }
 
@@ -40,19 +40,35 @@ export class InputFormComponent implements OnInit {
    */
   calculateDrawdown() {
     this.drawdownData = [];
+    const totalYears: number = 40;
+    const maxRows: number = totalYears / 2;
 
     for (let i = 0; i < 40; ++i) {
-      if (this.fundAmount > 0)
-        this.drawdownData.push(new YearTotal({ yearNum: i, remainingFunds: this.fundAmount, annualIncome: this.drawdownAmount > this.fundAmount ? this.fundAmount: this.drawdownAmount }));
-      else
-        this.drawdownData.push(new YearTotal({ yearNum: i, remainingFunds: 0, annualIncome: 0}));
+      if (this.fundAmount > 0) {
+        if (i >= maxRows) {
+          let thisRow: YearTotal = this.drawdownData[i - maxRows];
+          thisRow.remainingFundsRight = this.fundAmount;
+          thisRow.yearNumRight = i;
+          thisRow.annualIncomeRight = this.drawdownAmount > this.fundAmount ? this.fundAmount : this.drawdownAmount;
+        }
+        else
+          this.drawdownData.push(new YearTotal({ yearNum: i, remainingFunds: this.fundAmount, annualIncome: this.drawdownAmount > this.fundAmount ? this.fundAmount : this.drawdownAmount }));
+      }
+      else {
+        if (i >= maxRows) {
+          let thisRow: YearTotal = this.drawdownData[i - maxRows];
+          thisRow.remainingFundsRight = 0;
+          thisRow.yearNumRight = i;
+          thisRow.annualIncomeRight = 0;
+        }
+        else
+          this.drawdownData.push(new YearTotal({ yearNum: i, remainingFunds: 0, annualIncome: 0 }));
+      }
 
       this.depreciateOneYear();
 
       this.drawdownAmount += this.drawdownAmount * this.requiredAnnualIncomeGrowth / 100;
     }
-
-    let x = 0;
   }
 
   /**

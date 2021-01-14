@@ -17,3 +17,23 @@ mat-form-field
 {
     margin-left: 4rem;
 }
+
+th[class~="mat-header-cell"]
+{
+    font-size: medium;
+    font-weight: bold;
+    padding-right: 3rem;
+    color: yellow;
+}
+
+tr[class~="mat-header-row"]
+{
+    background-color: rgb(61, 61, 165);
+
+}
+
+.dc-input-form
+{
+    padding: 2em;
+    height: fit-content;
+}
