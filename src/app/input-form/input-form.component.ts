@@ -51,8 +51,6 @@ export class InputFormComponent implements OnInit {
 
       this.drawdownAmount += this.drawdownAmount * this.requiredAnnualIncomeGrowth / 100;
     }
-
-    let x = 0;
   }
 
   /**
