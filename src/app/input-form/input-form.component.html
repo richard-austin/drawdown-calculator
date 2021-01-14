@@ -3,7 +3,7 @@
     <!-- <mat-card-subtitle>Enter data</mat-card-subtitle> -->
   </mat-card-title>
   <div class="flex-container">
-    <mat-card-content>
+    <mat-card-content class="mat-elevation-z8 dc-input-form">
       <form (submit)="$event.preventDefault(); formSubmitted()">
         <mat-form-field>
           <mat-label>
@@ -32,14 +32,14 @@
           </mat-label>
           <input matInput #requiredAnnualIncomeGrowth>
         </mat-form-field>
-        <mat-card-actions>
+        <div>
           <button mat-flat-button color="primary">Calculate</button>
           <button type="button" (click)="cancel()" mat-flat-button>Cancel</button>
-        </mat-card-actions>
+        </div>
       </form>
     </mat-card-content>
     <mat-card-content class="table-container">
-      <table mat-table [dataSource]="drawdownData" class="mat-elevation-z8">
+      <table *ngIf="drawdownData.length > 0" mat-table [dataSource]="drawdownData" class="mat-elevation-z8">
         <!-- Year number Column -->
         <ng-container matColumnDef="yearNum">
           <th mat-header-cell *matHeaderCellDef> Year No. </th>
@@ -58,6 +58,23 @@
           <td mat-cell *matCellDef="let element"> {{element.annualIncome.toFixed(2)}} </td>
         </ng-container>
 
+          <!-- Year number Column (right)-->
+          <ng-container matColumnDef="yearNumRight">
+            <th mat-header-cell *matHeaderCellDef> Year No. </th>
+            <td mat-cell *matCellDef="let element"> {{element.yearNumRight}} </td>
+          </ng-container>
+  
+          <!-- Remaining funds Column (right)-->
+          <ng-container matColumnDef="remainingFundsRight">
+            <th mat-header-cell *matHeaderCellDef> Remaining Funds </th>
+            <td mat-cell *matCellDef="let element"> {{element.remainingFundsRight.toFixed(2)}} </td>
+          </ng-container>
+  
+          <!-- Annual Income Column (right)-->
+          <ng-container matColumnDef="annualIncomeRight">
+            <th mat-header-cell *matHeaderCellDef> Annual Income</th>
+            <td mat-cell *matCellDef="let element"> {{element.annualIncomeRight.toFixed(2)}} </td>
+          </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
