@@ -43,7 +43,7 @@
           <mat-error *ngIf="hasError('requiredAnnualIncomeGrowth', 'pattern')">Required Annual Income Growth should be a number</mat-error>
        </mat-form-field>
         <div>
-          <button mat-flat-button color="primary">Calculate</button>
+          <button mat-flat-button color="primary" [disabled]="!drawdowndataForm.valid">Calculate</button>
           <button type="button" (click)="cancel()" mat-flat-button>Cancel</button>
         </div>
       </form>
