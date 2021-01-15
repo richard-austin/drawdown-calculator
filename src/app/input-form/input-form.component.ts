@@ -94,10 +94,10 @@ export class InputFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.drawdowndataForm = new FormGroup({
-      fundAmount: new FormControl('', [Validators.required, Validators.min(0), Validators.pattern(/^[-+]{0,1}[0-9]{1,12}$/)]),
-      drawdownAmount: new FormControl('', [Validators.required, Validators.pattern(/^[-+]{0,1}[0-9]{1,12}$/)]),
-      expectedAnnualFundGrowth: new FormControl('', [Validators.required, Validators.pattern(/^[-+]{0,1}[0-9]{1,12}$/)]),
-      requiredAnnualIncomeGrowth: new FormControl('', [Validators.required, Validators.pattern(/^[-+]{0,1}[0-9]{1,12}$/)])
-    })
+      fundAmount: new FormControl('', [Validators.required, Validators.min(0), Validators.pattern(/^[\-+]?[0-9]*\.?[0-9]+$/)]),
+      drawdownAmount: new FormControl('', [Validators.required, Validators.pattern(/^[\-+]?[0-9]*\.?[0-9]+$/)]),
+      expectedAnnualFundGrowth: new FormControl('', [Validators.required, Validators.pattern(/^[\-+]?[0-9]*\.?[0-9]+$/)]),
+      requiredAnnualIncomeGrowth: new FormControl('', [Validators.required, Validators.pattern(/^[\-+]?[0-9]*\.?[0-9]+$/)])
+    });
   }
 }
