@@ -1,5 +1,6 @@
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { YearTotal } from '../classes/YearTotal';
 
 @Component({
@@ -21,6 +22,8 @@ export class InputFormComponent implements OnInit {
   drawdownData: YearTotal[] = [];
   displayedColumns: string[] = ['yearNum', 'remainingFunds', 'annualIncome', 'yearNumRight', 'remainingFundsRight', 'annualIncomeRight'];
 
+  drawdowndataForm!: FormGroup; 
+
   constructor() { }
 
   cancel() {
@@ -28,8 +31,8 @@ export class InputFormComponent implements OnInit {
   }
 
   formSubmitted() {
-    this.fundAmount = parseInt(this.fundAmountEl?.nativeElement.value.toString())
-    this.drawdownAmount = parseInt(this.drawdownAmountEl?.nativeElement.value.toString())
+    this.fundAmount = parseFloat(this.fundAmountEl?.nativeElement.value.toString())
+    this.drawdownAmount = parseFloat(this.drawdownAmountEl?.nativeElement.value.toString())
     this.expectedAnnualFundGrowth = parseFloat(this.expectedAnnualFundGrowthEL?.nativeElement.value.toString())
     this.requiredAnnualIncomeGrowth = parseFloat(this.requiredAnnualIncomeGrowthEL?.nativeElement.value.toString())
     this.calculateDrawdown();
@@ -85,7 +88,16 @@ export class InputFormComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
+  hasError = (controlName: string, errorName: string):boolean =>{
+    return this.drawdowndataForm.controls[controlName].hasError(errorName);
   }
 
+  ngOnInit(): void {
+    this.drawdowndataForm = new FormGroup({
+      fundAmount: new FormControl('', [Validators.required, Validators.min(0), Validators.pattern(/^[-+]{0,1}[0-9]{1,12}$/)]),
+      drawdownAmount: new FormControl('', [Validators.required, Validators.pattern(/^[-+]{0,1}[0-9]{1,12}$/)]),
+      expectedAnnualFundGrowth: new FormControl('', [Validators.required, Validators.pattern(/^[-+]{0,1}[0-9]{1,12}$/)]),
+      requiredAnnualIncomeGrowth: new FormControl('', [Validators.required, Validators.pattern(/^[-+]{0,1}[0-9]{1,12}$/)])
+    })
+  }
 }

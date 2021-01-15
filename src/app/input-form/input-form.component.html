@@ -4,34 +4,44 @@
   </mat-card-title>
   <div class="flex-container">
     <mat-card-content class="mat-elevation-z8 dc-input-form">
-      <form (submit)="$event.preventDefault(); formSubmitted()">
+      <form (submit)="$event.preventDefault(); formSubmitted()" [formGroup]="drawdowndataForm">
         <mat-form-field>
           <mat-label>
             Fund Amount
           </mat-label>
-          <input matInput #fundAmount>
+          <input matInput #fundAmount formControlName="fundAmount">
+          <mat-hint align="end">Your pension pot value</mat-hint>
+          <mat-error *ngIf="hasError('fundAmount', 'required')">Fund Amount is required</mat-error>
+          <mat-error *ngIf="hasError('fundAmount', 'min')">Fund value should be greater than zero</mat-error>
+          <mat-error *ngIf="hasError('fundAmount', 'pattern')">Fund value should be a positive number</mat-error>
         </mat-form-field>
         <br>
         <mat-form-field>
           <mat-label>
-            Required Annual Drawdown Amount
+            Annual Drawdown Amount
           </mat-label>
-          <input matInput #drawdownAmount>
+          <input matInput #drawdownAmount formControlName="drawdownAmount">
+          <mat-error *ngIf="hasError('drawdownAmount', 'required')">Drawdown Amount is required</mat-error>
+          <mat-error *ngIf="hasError('drawdownAmount', 'pattern')">Drawdown Amount should be a number</mat-error>
         </mat-form-field>
         <br>
         <mat-form-field>
           <mat-label>
             Expected Average Annual Fund Growth (%)
           </mat-label>
-          <input matInput #expectedAnnualFundGrowth>
+          <input matInput #expectedAnnualFundGrowth formControlName="expectedAnnualFundGrowth">
+          <mat-error *ngIf="hasError('expectedAnnualFundGrowth', 'required')">Expected Annual Fund Growth is required</mat-error>
+          <mat-error *ngIf="hasError('expectedAnnualFundGrowth', 'pattern')">Expected Annual Fund Growth should be a number</mat-error>
         </mat-form-field>
         <br>
         <mat-form-field>
           <mat-label>
             Required Annual Income Growth (%)
           </mat-label>
-          <input matInput #requiredAnnualIncomeGrowth>
-        </mat-form-field>
+          <input matInput #requiredAnnualIncomeGrowth formControlName="requiredAnnualIncomeGrowth">
+          <mat-error *ngIf="hasError('requiredAnnualIncomeGrowth', 'required')">Required Annual Income Growth is required</mat-error>
+          <mat-error *ngIf="hasError('requiredAnnualIncomeGrowth', 'pattern')">Required Annual Income Growth should be a number</mat-error>
+       </mat-form-field>
         <div>
           <button mat-flat-button color="primary">Calculate</button>
           <button type="button" (click)="cancel()" mat-flat-button>Cancel</button>
@@ -58,23 +68,23 @@
           <td mat-cell *matCellDef="let element"> {{element.annualIncome.toFixed(2)}} </td>
         </ng-container>
 
-          <!-- Year number Column (right)-->
-          <ng-container matColumnDef="yearNumRight">
-            <th mat-header-cell *matHeaderCellDef> Year No. </th>
-            <td mat-cell *matCellDef="let element"> {{element.yearNumRight}} </td>
-          </ng-container>
-  
-          <!-- Remaining funds Column (right)-->
-          <ng-container matColumnDef="remainingFundsRight">
-            <th mat-header-cell *matHeaderCellDef> Remaining Funds </th>
-            <td mat-cell *matCellDef="let element"> {{element.remainingFundsRight.toFixed(2)}} </td>
-          </ng-container>
-  
-          <!-- Annual Income Column (right)-->
-          <ng-container matColumnDef="annualIncomeRight">
-            <th mat-header-cell *matHeaderCellDef> Annual Income</th>
-            <td mat-cell *matCellDef="let element"> {{element.annualIncomeRight.toFixed(2)}} </td>
-          </ng-container>
+        <!-- Year number Column (right)-->
+        <ng-container matColumnDef="yearNumRight">
+          <th mat-header-cell *matHeaderCellDef> Year No. </th>
+          <td mat-cell *matCellDef="let element"> {{element.yearNumRight}} </td>
+        </ng-container>
+
+        <!-- Remaining funds Column (right)-->
+        <ng-container matColumnDef="remainingFundsRight">
+          <th mat-header-cell *matHeaderCellDef> Remaining Funds </th>
+          <td mat-cell *matCellDef="let element"> {{element.remainingFundsRight.toFixed(2)}} </td>
+        </ng-container>
+
+        <!-- Annual Income Column (right)-->
+        <ng-container matColumnDef="annualIncomeRight">
+          <th mat-header-cell *matHeaderCellDef> Annual Income</th>
+          <td mat-cell *matCellDef="let element"> {{element.annualIncomeRight.toFixed(2)}} </td>
+        </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
