@@ -11,12 +11,14 @@ import {MatInputModule} from "@angular/material/input";
 import {MatTableModule} from "@angular/material/table";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { ReactiveFormsModule } from '@angular/forms';
+import { GraphingComponent } from './graphing/graphing.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     InputFormComponent,
+    GraphingComponent,
   ],
   imports: [
     BrowserModule,

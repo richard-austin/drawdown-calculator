@@ -2,6 +2,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { YearTotal } from '../classes/YearTotal';
+import {GraphingComponent} from "../graphing/graphing.component";
 
 @Component({
   selector: 'app-input-form',
@@ -13,7 +14,7 @@ export class InputFormComponent implements OnInit {
   @ViewChild('drawdownAmount', { read: ElementRef }) drawdownAmountEl!: ElementRef<HTMLInputElement>;
   @ViewChild('expectedAnnualFundGrowth', { read: ElementRef }) expectedAnnualFundGrowthEL!: ElementRef<HTMLInputElement>;
   @ViewChild('requiredAnnualIncomeGrowth', { read: ElementRef }) requiredAnnualIncomeGrowthEL!: ElementRef<HTMLInputElement>;
-
+  @ViewChild(GraphingComponent) graph!:GraphingComponent;
   fundAmount!: number;
   drawdownAmount!: number;
   expectedAnnualFundGrowth!: number;
@@ -22,7 +23,7 @@ export class InputFormComponent implements OnInit {
   drawdownData: YearTotal[] = [];
   displayedColumns: string[] = ['yearNum', 'remainingFunds', 'annualIncome', 'yearNumRight', 'remainingFundsRight', 'annualIncomeRight'];
 
-  drawdowndataForm!: FormGroup; 
+  drawdowndataForm!: FormGroup;
 
   constructor() { }
 
@@ -71,12 +72,13 @@ export class InputFormComponent implements OnInit {
       this.depreciateOneYear();
 
       this.drawdownAmount += this.drawdownAmount * this.requiredAnnualIncomeGrowth / 100;
+      this.graph.draw();
     }
   }
 
   /**
    * depreciateOneYear: Take one years money from the fund applying the expected annual fund growth
-   * 
+   *
    */
   depreciateOneYear() {
     let monthlyFundGrowth: number = Math.pow((1 + this.expectedAnnualFundGrowth / 100), 1 / 12);
