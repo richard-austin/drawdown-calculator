@@ -1,15 +1,17 @@
 
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { YearTotal } from '../classes/YearTotal';
 import {GraphingComponent} from "../graphing/graphing.component";
+import {tap} from "rxjs/operators";
+import {Subscription, timer} from "rxjs";
 
 @Component({
   selector: 'app-input-form',
   templateUrl: './input-form.component.html',
   styleUrls: ['./input-form.component.scss']
 })
-export class InputFormComponent implements OnInit {
+export class InputFormComponent implements OnInit, OnDestroy {
   @ViewChild('fundAmount', { read: ElementRef }) fundAmountEl!: ElementRef<HTMLInputElement>;
   @ViewChild('drawdownAmount', { read: ElementRef }) drawdownAmountEl!: ElementRef<HTMLInputElement>;
   @ViewChild('expectedAnnualFundGrowth', { read: ElementRef }) expectedAnnualFundGrowthEL!: ElementRef<HTMLInputElement>;
@@ -24,10 +26,11 @@ export class InputFormComponent implements OnInit {
   displayedColumns: string[] = ['yearNum', 'remainingFunds', 'annualIncome', 'yearNumRight', 'remainingFundsRight', 'annualIncomeRight'];
 
   drawdowndataForm!: FormGroup;
+  timerSub:Subscription | null= null;
 
   constructor() { }
 
-  cancel() {
+ cancel() {
     this.drawdownData = [];
   }
 
@@ -72,8 +75,12 @@ export class InputFormComponent implements OnInit {
       this.depreciateOneYear();
 
       this.drawdownAmount += this.drawdownAmount * this.requiredAnnualIncomeGrowth / 100;
-      this.graph.draw();
+
     }
+
+    this.timerSub?.unsubscribe();
+
+    this.timerSub = timer(100).pipe(tap(() => this.graph.draw())).subscribe();
   }
 
   /**
@@ -101,5 +108,9 @@ export class InputFormComponent implements OnInit {
       expectedAnnualFundGrowth: new FormControl('', [Validators.required, Validators.pattern(/^[\-+]?[0-9]*\.?[0-9]+$/)]),
       requiredAnnualIncomeGrowth: new FormControl('', [Validators.required, Validators.pattern(/^[\-+]?[0-9]*\.?[0-9]+$/)])
     });
+  }
+
+  ngOnDestroy(): void {
+      this.timerSub?.unsubscribe();
   }
 }
