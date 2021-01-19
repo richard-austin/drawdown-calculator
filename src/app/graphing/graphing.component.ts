@@ -14,11 +14,11 @@ export class GraphingComponent implements OnInit {
   private graphCtx!: CanvasRenderingContext2D | null;
 
   readonly height: number = 400;
-  readonly width: number = 800;
+  readonly width: number = 950;
   readonly border: number = 20;
-  readonly leftBorder: number = 60;
-  readonly rightBorder: number = 50;
-  readonly bottomBorder: number = 30;
+  readonly leftBorder: number = 120;
+  readonly rightBorder: number = 140;
+  readonly bottomBorder: number = 60;
 
   constructor() {
   }
@@ -63,14 +63,15 @@ export class GraphingComponent implements OnInit {
       const yOffset: number = this.height - this.bottomBorder;
       const xScale: number = (this.width - this.rightBorder - this.leftBorder) / drawDownDataLinear.length;
       const xOffset = this.leftBorder;
+      const labelIndent = 20;
 
       const yScaleInc: number = -(this.height - this.border - this.bottomBorder) / maxIncome;
 
       let textHeight: number = 10;
 
       let gradient:CanvasGradient = this.graphCtx.createLinearGradient(0, 0, this.width, this.height);
-      gradient.addColorStop(0, '#bbbbcc');
-      gradient.addColorStop(1, '#eeeeff');
+      gradient.addColorStop(0, '#d8d8ee');
+      gradient.addColorStop(1, '#ffffff');
       this.graphCtx.fillStyle = gradient;
       this.graphCtx.fillRect(0, 0, this.width, this.height);  
       this.graphCtx.fillStyle = '#000000';
@@ -102,13 +103,14 @@ export class GraphingComponent implements OnInit {
       // y axis left label (remaining funds)
       this.graphCtx.save();
       this.graphCtx.font = textHeight + "px Arial";
-      this.graphCtx.translate(0, this.height / 2);
-      this.graphCtx.rotate(Math.PI / 2);
-      this.graphCtx.textAlign = 'center';
-      this.graphCtx.fillText("Remaining Funds", 0, 0);
+      this.graphCtx.translate(0, (this.border+ this.height-this.bottomBorder)/ 2);
+    //  this.graphCtx.rotate(Math.PI / 2);
+      this.graphCtx.textAlign = 'left';
+      this.graphCtx.fillText("Remaining", labelIndent, -textHeight/2);
+      this.graphCtx.fillText("Funds", labelIndent, textHeight/2);
       this.graphCtx.restore();
       
-      // y axis calibration (income amount)
+      // y axis calibration (Annual income)
       for (let i: number = 0, j: number = 0; j < 6; i += maxIncome / 5, ++j) {
         let textMetrics: TextMetrics = this.graphCtx.measureText(i.toFixed(1));
         let textWidth: number = textMetrics.width;
@@ -117,10 +119,11 @@ export class GraphingComponent implements OnInit {
 
       // y axis right label (annual income)
       this.graphCtx.save();
-      this.graphCtx.translate(this.width, this.height / 2);
-      this.graphCtx.rotate(-Math.PI / 2);
-      this.graphCtx.textAlign = 'center';
-      this.graphCtx.fillText("Annual Income", 0, 0);
+      this.graphCtx.translate(this.width-this.rightBorder, (this.border+ this.height-this.bottomBorder)/ 2);
+       //     this.graphCtx.rotate(-Math.PI / 2);
+      this.graphCtx.textAlign = 'left';
+      this.graphCtx.fillText("Annual", labelIndent, -textHeight/2);
+      this.graphCtx.fillText("Income", labelIndent, textHeight/2);
       this.graphCtx.stroke();
       this.graphCtx.restore();
 
