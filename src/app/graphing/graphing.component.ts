@@ -68,8 +68,12 @@ export class GraphingComponent implements OnInit {
 
       let textHeight: number = 10;
 
-      this.graphCtx.clearRect(0, 0, this.width, this.height);
-
+      let gradient:CanvasGradient = this.graphCtx.createLinearGradient(0, 0, this.width, this.height);
+      gradient.addColorStop(0, '#bbbbcc');
+      gradient.addColorStop(1, '#eeeeff');
+      this.graphCtx.fillStyle = gradient;
+      this.graphCtx.fillRect(0, 0, this.width, this.height);  
+      this.graphCtx.fillStyle = '#000000';
       // set up the x calibration
       const years: number = drawDownDataLinear.length;
       this.graphCtx.beginPath();
@@ -103,8 +107,15 @@ export class GraphingComponent implements OnInit {
       this.graphCtx.textAlign = 'center';
       this.graphCtx.fillText("Remaining Funds", 0, 0);
       this.graphCtx.restore();
-      // y axis right label (annual income)
+      
+      // y axis calibration (income amount)
+      for (let i: number = 0, j: number = 0; j < 6; i += maxIncome / 5, ++j) {
+        let textMetrics: TextMetrics = this.graphCtx.measureText(i.toFixed(1));
+        let textWidth: number = textMetrics.width;
+        this.graphCtx.fillText(i.toFixed(0), this.width-this.rightBorder, i * yScaleInc + yOffset + textHeight / 2);
+      }
 
+      // y axis right label (annual income)
       this.graphCtx.save();
       this.graphCtx.translate(this.width, this.height / 2);
       this.graphCtx.rotate(-Math.PI / 2);
@@ -114,7 +125,7 @@ export class GraphingComponent implements OnInit {
       this.graphCtx.restore();
 
       this.graphCtx.lineWidth = 0.5;
-      this.graphCtx.strokeStyle = '#fd0042';
+      this.graphCtx.strokeStyle = '#fd0000';
 
       this.graphCtx.moveTo(drawDownDataLinear[0].yearNum * xScale + xOffset, drawDownDataLinear[0].annualIncome * yScaleInc + yOffset);
       this.graphCtx.beginPath();
@@ -124,6 +135,7 @@ export class GraphingComponent implements OnInit {
       });
       this.graphCtx.stroke();
 
+      this.graphCtx.strokeStyle = '#ff00ff';     
       this.graphCtx.moveTo(drawDownDataLinear[0].yearNum * xScale + xOffset, drawDownDataLinear[0].remainingFunds * yScale + yOffset);
       this.graphCtx.beginPath();
       drawDownDataLinear.forEach((yearTotals: YearTotalSingle) => {
