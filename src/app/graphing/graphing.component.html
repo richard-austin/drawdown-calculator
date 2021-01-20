@@ -1,1 +1,10 @@
-<canvas #graph [width]="width" [height]="height" (mousemove)="showValues($event)" class="mat-elevation-z8"></canvas>
+<canvas #graph [width]="width" [height]="height" (mousemove)="showValues($event)" (mouseout)="figuresOff()" class="mat-elevation-z8">
+    Your browser does not support the canvas tag
+</canvas>
+<div class="graph-figures">
+    <div #fundsRemainingBox>
+      <div></div>
+        <div>Year Number: {{yearNum}}</div>
+        <div>Remaining Funds: {{remainingFunds}}</div>
+    </div>
+</div>

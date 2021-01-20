@@ -1,14 +1,16 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {YearTotal} from '../classes/YearTotal';
-import {YearTotalSingle} from "../classes/YearTotalSingle";
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { YearTotal } from '../classes/YearTotal';
+import { YearTotalSingle } from "../classes/YearTotalSingle";
 
 @Component({
   selector: 'app-graphing',
   templateUrl: './graphing.component.html',
   styleUrls: ['./graphing.component.scss']
 })
-export class GraphingComponent implements OnInit {
-  @ViewChild('graph', {read: ElementRef}) graphCanvasEl!: ElementRef<HTMLCanvasElement>;
+export class GraphingComponent implements OnInit, AfterViewInit {
+  @ViewChild('graph', { read: ElementRef }) graphCanvasEl!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('fundsRemainingBox', { read: ElementRef }) fundsRemainingBoxEl!: ElementRef<HTMLDivElement>;
+
   @Input() drawdownData!: YearTotal[];
 
   private graphCtx!: CanvasRenderingContext2D | null;
@@ -17,8 +19,18 @@ export class GraphingComponent implements OnInit {
   readonly width: number = 950;
   readonly border: number = 20;
   readonly leftBorder: number = 120;
-  readonly rightBorder: number = 140;
+  readonly rightBorder: number = 70;
   readonly bottomBorder: number = 60;
+
+  yScale!: number;
+  yOffset!: number;
+  xScale!: number;
+  xOffset!: number;
+  drawdownDataLinear: YearTotalSingle[] = [];
+
+  yearNum!: number;
+  remainingFunds!: string;
+  remainingFundsBox!: HTMLDivElement;
 
   constructor() {
   }
@@ -30,24 +42,22 @@ export class GraphingComponent implements OnInit {
     let maxIncome = this.drawdownData[0].annualIncome;
     let minIncome = maxIncome;
 
-    let drawDownDataLinear: YearTotalSingle[] = [];
-
     let graphCanvas: HTMLCanvasElement = this.graphCanvasEl.nativeElement;
     this.graphCtx = graphCanvas.getContext('2d');
 
     if (this.graphCtx) {
+      this.drawdownDataLinear = [];
       // Make a single column array from the dual column input.
       this.drawdownData.forEach((yearTotal: YearTotal) => {
-        drawDownDataLinear.push(new YearTotalSingle(yearTotal.yearNum, yearTotal.remainingFunds, yearTotal.annualIncome));
+        this.drawdownDataLinear.push(new YearTotalSingle(yearTotal.yearNum, yearTotal.remainingFunds, yearTotal.annualIncome));
       });
 
       this.drawdownData?.forEach((yearTotal: YearTotal) => {
-        drawDownDataLinear.push(new YearTotalSingle(yearTotal.yearNumRight, yearTotal.remainingFundsRight, yearTotal.annualIncomeRight));
+        this.drawdownDataLinear.push(new YearTotalSingle(yearTotal.yearNumRight, yearTotal.remainingFundsRight, yearTotal.annualIncomeRight));
       });
 
       // Find th max and min funds and ncome amounts
-      drawDownDataLinear.forEach((yearTotal: YearTotalSingle) =>
-      {
+      this.drawdownDataLinear.forEach((yearTotal: YearTotalSingle) => {
         if (yearTotal.remainingFunds > maxFunds)
           maxFunds = yearTotal.remainingFunds;
         else if (yearTotal.remainingFunds < minFunds)
@@ -59,24 +69,25 @@ export class GraphingComponent implements OnInit {
           minIncome = yearTotal.annualIncome;
       });
 
-      const yScale: number = -(this.height - this.border - this.bottomBorder) / maxFunds;
-      const yOffset: number = this.height - this.bottomBorder;
-      const xScale: number = (this.width - this.rightBorder - this.leftBorder) / drawDownDataLinear.length;
-      const xOffset = this.leftBorder;
+      this.yScale = -(this.height - this.border - this.bottomBorder) / maxFunds;
+      this.yOffset = this.height - this.bottomBorder;
+      this.xScale = (this.width - this.rightBorder - this.leftBorder) / this.drawdownDataLinear.length;
+      this.xOffset = this.leftBorder;
+
       const labelIndent = 20;
 
       const yScaleInc: number = -(this.height - this.border - this.bottomBorder) / maxIncome;
 
       let textHeight: number = 10;
 
-      let gradient:CanvasGradient = this.graphCtx.createLinearGradient(0, 0, this.width, this.height);
+      let gradient: CanvasGradient = this.graphCtx.createLinearGradient(0, 0, this.width, this.height);
       gradient.addColorStop(0, '#d8d8ee');
       gradient.addColorStop(1, '#ffffff');
       this.graphCtx.fillStyle = gradient;
-      this.graphCtx.fillRect(0, 0, this.width, this.height);  
+      this.graphCtx.fillRect(0, 0, this.width, this.height);
       this.graphCtx.fillStyle = '#000000';
       // set up the x calibration
-      const years: number = drawDownDataLinear.length;
+      const years: number = this.drawdownDataLinear.length;
       this.graphCtx.beginPath();
       this.graphCtx.lineWidth = 0.25;
       this.graphCtx.strokeStyle = '#474646';
@@ -84,7 +95,7 @@ export class GraphingComponent implements OnInit {
 
       // x axis calibration
       for (let i = 0; i <= years; i += 5) {
-        let x = i * xScale + xOffset;
+        let x = i * this.xScale + this.xOffset;
         this.graphCtx.moveTo(x, this.height - this.bottomBorder);
         this.graphCtx.lineTo(x, this.border);
         let yearNum: string = i.toString();
@@ -94,71 +105,91 @@ export class GraphingComponent implements OnInit {
 
       // y axis calibration (funds)
       for (let i: number = 0; i <= maxFunds; i += maxFunds / 5) {
-        this.graphCtx.moveTo(this.leftBorder, i * yScale + yOffset);
-        this.graphCtx.lineTo(this.width - this.rightBorder, i * yScale + yOffset);
+        this.graphCtx.moveTo(this.leftBorder, i * this.yScale + this.yOffset);
+        this.graphCtx.lineTo(this.width - this.rightBorder, i * this.yScale + this.yOffset);
         let textMetrics: TextMetrics = this.graphCtx.measureText(i.toFixed(1));
         let textWidth: number = textMetrics.width;
-        this.graphCtx.fillText(i.toFixed(0), this.leftBorder - textWidth, i * yScale + yOffset + textHeight / 2);
+        this.graphCtx.fillText(i.toFixed(0), this.leftBorder - textWidth, i * this.yScale + this.yOffset + textHeight / 2);
       }
       // y axis left label (remaining funds)
       this.graphCtx.save();
       this.graphCtx.font = textHeight + "px Arial";
-      this.graphCtx.translate(0, (this.border+ this.height-this.bottomBorder)/ 2);
-    //  this.graphCtx.rotate(Math.PI / 2);
+      this.graphCtx.translate(0, (this.border + this.height - this.bottomBorder) / 2);
+      //  this.graphCtx.rotate(Math.PI / 2);
       this.graphCtx.textAlign = 'left';
-      this.graphCtx.fillText("Remaining", labelIndent, -textHeight/2);
-      this.graphCtx.fillText("Funds", labelIndent, textHeight/2);
+      this.graphCtx.fillText("Remaining", labelIndent, -textHeight / 2);
+      this.graphCtx.fillText("Funds", labelIndent, textHeight / 2);
       this.graphCtx.restore();
-      
+
       // y axis calibration (Annual income)
       for (let i: number = 0, j: number = 0; j < 6; i += maxIncome / 5, ++j) {
         let textMetrics: TextMetrics = this.graphCtx.measureText(i.toFixed(1));
         let textWidth: number = textMetrics.width;
-        this.graphCtx.fillText(i.toFixed(0), this.width-this.rightBorder, i * yScaleInc + yOffset + textHeight / 2);
+        this.graphCtx.fillText(i.toFixed(0), this.width - this.rightBorder, i * yScaleInc + this.yOffset + textHeight / 2);
       }
 
       // y axis right label (annual income)
       this.graphCtx.save();
-      this.graphCtx.translate(this.width-this.rightBorder, (this.border+ this.height-this.bottomBorder)/ 2);
-       //     this.graphCtx.rotate(-Math.PI / 2);
+      this.graphCtx.translate(this.width - this.rightBorder, (this.border + this.height - this.bottomBorder) / 2);
+      //     this.graphCtx.rotate(-Math.PI / 2);
       this.graphCtx.textAlign = 'left';
-      this.graphCtx.fillText("Annual", labelIndent, -textHeight/2);
-      this.graphCtx.fillText("Income", labelIndent, textHeight/2);
+      this.graphCtx.fillText("Annual", labelIndent, -textHeight / 2);
+      this.graphCtx.fillText("Income", labelIndent, textHeight / 2);
       this.graphCtx.stroke();
       this.graphCtx.restore();
 
       this.graphCtx.lineWidth = 0.5;
       this.graphCtx.strokeStyle = '#fd0000';
 
-      this.graphCtx.moveTo(drawDownDataLinear[0].yearNum * xScale + xOffset, drawDownDataLinear[0].annualIncome * yScaleInc + yOffset);
+      this.graphCtx.moveTo(this.drawdownDataLinear[0].yearNum * this.xScale + this.xOffset, this.drawdownDataLinear[0].annualIncome * yScaleInc + this.yOffset);
       this.graphCtx.beginPath();
-      drawDownDataLinear.forEach((yearTotals: YearTotalSingle) => {
+      this.drawdownDataLinear.forEach((yearTotals: YearTotalSingle) => {
         // @ts-ignore  Otherwise it complains that graphCtx could be null
-        this.graphCtx.lineTo(yearTotals.yearNum * xScale + xOffset, yearTotals.annualIncome * yScaleInc + yOffset);
+        this.graphCtx.lineTo(yearTotals.yearNum * this.xScale + this.xOffset, yearTotals.annualIncome * yScaleInc + this.yOffset);
       });
       this.graphCtx.stroke();
 
-      this.graphCtx.strokeStyle = '#ff00ff';     
-      this.graphCtx.moveTo(drawDownDataLinear[0].yearNum * xScale + xOffset, drawDownDataLinear[0].remainingFunds * yScale + yOffset);
+      this.graphCtx.strokeStyle = '#ff00ff';
+      this.graphCtx.moveTo(this.drawdownDataLinear[0].yearNum * this.xScale + this.xOffset, this.drawdownDataLinear[0].remainingFunds * this.yScale + this.yOffset);
       this.graphCtx.beginPath();
-      drawDownDataLinear.forEach((yearTotals: YearTotalSingle) => {
+      this.drawdownDataLinear.forEach((yearTotals: YearTotalSingle) => {
         // @ts-ignore  Otherwise it complains that graphCtx could be null
-        this.graphCtx.lineTo(yearTotals.yearNum * xScale + xOffset, yearTotals.remainingFunds * yScale + yOffset);
+        this.graphCtx.lineTo(yearTotals.yearNum * this.xScale + this.xOffset, yearTotals.remainingFunds * this.yScale + this.yOffset);
       });
       this.graphCtx.stroke();
-
     }
   }
 
-  showValues($event: MouseEvent) {
+  showValues($event: MouseEvent):void {
     let rect = this.graphCanvasEl.nativeElement.getBoundingClientRect();
     let x = $event.clientX - rect.left;
     let y = $event.clientY - rect.top;
 
-    console.log("Left? : " + x + " ; Top? : " + y + ".");
+    if (this.fundsRemainingBoxEl && !this.remainingFundsBox)
+      this.remainingFundsBox = this.fundsRemainingBoxEl.nativeElement;
 
+    let yearNum: number = Math.ceil((x - this.xOffset) / this.xScale);
+
+    if (yearNum >= 0 && yearNum < 40) {
+      this.remainingFundsBox.style.visibility = 'visible';
+      this.remainingFundsBox.style.top
+      this.yearNum = yearNum;
+      this.remainingFunds = this.drawdownDataLinear[yearNum].remainingFunds.toFixed(2);
+      this.remainingFundsBox.style.top = (this.drawdownDataLinear[yearNum].remainingFunds * this.yScale + this.yOffset-this.height).toString() + 'px';
+      this.remainingFundsBox.style.left = (x - this.remainingFundsBox.clientWidth/2).toString() + 'px';
+    }
+    else
+      this.remainingFundsBox.style.visibility = 'hidden';
+  }
+
+  figuresOff(): void{
+    this.remainingFundsBox.style.visibility = 'hidden';
   }
 
   ngOnInit(): void {
   }
+
+  ngAfterViewInit(): void {
+  }
+
 }
