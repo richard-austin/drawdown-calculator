@@ -123,8 +123,6 @@ export class GraphingComponent implements OnInit, AfterViewInit {
 
       // y axis calibration (Annual income)
       for (let i: number = 0, j: number = 0; j < 6; i += maxIncome / 5, ++j) {
-        let textMetrics: TextMetrics = this.graphCtx.measureText(i.toFixed(1));
-        let textWidth: number = textMetrics.width;
         this.graphCtx.fillText(i.toFixed(0), this.width - this.rightBorder, i * yScaleInc + this.yOffset + textHeight / 2);
       }
 
