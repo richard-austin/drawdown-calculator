@@ -25,9 +25,9 @@ export class InputFormComponent implements OnInit, OnDestroy {
   drawdownData: YearTotal[] = [];
   displayedColumns: string[] = ['yearNum', 'remainingFunds', 'annualIncome', 'yearNumRight', 'remainingFundsRight', 'annualIncomeRight'];
 
-  drawdowndataForm!: FormGroup;
+  drawDownDataForm!: FormGroup;
   timerSub:Subscription | null= null;
-
+  bIsGraph: boolean = false;
   constructor() { }
 
  cancel() {
@@ -79,7 +79,6 @@ export class InputFormComponent implements OnInit, OnDestroy {
     }
 
     this.timerSub?.unsubscribe();
-
     this.timerSub = timer(100).pipe(tap(() => this.graph.draw())).subscribe();
   }
 
@@ -98,11 +97,14 @@ export class InputFormComponent implements OnInit, OnDestroy {
   }
 
   hasError = (controlName: string, errorName: string):boolean =>{
-    return this.drawdowndataForm.controls[controlName].hasError(errorName);
+    return this.drawDownDataForm.controls[controlName].hasError(errorName);
   }
 
+  setIsGraph(checked: boolean):void {
+    this.bIsGraph = checked;
+  }
   ngOnInit(): void {
-    this.drawdowndataForm = new FormGroup({
+    this.drawDownDataForm = new FormGroup({
       fundAmount: new FormControl('', [Validators.required, Validators.min(0), Validators.pattern(/^[\-+]?[0-9]*\.?[0-9]+$/)]),
       drawdownAmount: new FormControl('', [Validators.required, Validators.pattern(/^[\-+]?[0-9]*\.?[0-9]+$/)]),
       expectedAnnualFundGrowth: new FormControl('', [Validators.required, Validators.pattern(/^[\-+]?[0-9]*\.?[0-9]+$/)]),

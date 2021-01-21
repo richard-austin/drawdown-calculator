@@ -10,8 +10,9 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatTableModule} from "@angular/material/table";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { GraphingComponent } from './graphing/graphing.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 
 @NgModule({
@@ -29,7 +30,10 @@ import { GraphingComponent } from './graphing/graphing.component';
     MatCardModule,
     MatButtonModule,
     MatInputModule,
-    MatTableModule],
+    MatTableModule,
+    MatCheckboxModule,
+    FormsModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

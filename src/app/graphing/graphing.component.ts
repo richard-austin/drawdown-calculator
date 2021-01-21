@@ -161,9 +161,9 @@ export class GraphingComponent implements OnInit, AfterViewInit {
   }
 
   showValues($event: MouseEvent):void {
-    let rect = this.graphCanvasEl.nativeElement.getBoundingClientRect();
-    let x = $event.clientX - rect.left;
-    let y = $event.clientY - rect.top;
+    let rect: DOMRect = this.graphCanvasEl.nativeElement.getBoundingClientRect();
+    let x:number = $event.clientX - rect.left;
+ //   let y = $event.clientY - rect.top;
 
     if (this.fundsRemainingBoxEl && !this.remainingFundsBox)
       this.remainingFundsBox = this.fundsRemainingBoxEl.nativeElement;
@@ -175,7 +175,11 @@ export class GraphingComponent implements OnInit, AfterViewInit {
       this.remainingFundsBox.style.top
       this.yearNum = yearNum;
       this.remainingFunds = this.drawdownDataLinear[yearNum].remainingFunds.toFixed(2);
+      let rfbRect:DOMRect = this.remainingFundsBox.getBoundingClientRect();
+      let rfbWidth: number = rfbRect.width;
+      let padding =3.2;
       this.remainingFundsBox.style.top = (this.drawdownDataLinear[yearNum].remainingFunds * this.yScale + this.yOffset-this.height).toString() + 'px';
+      (<HTMLDivElement>this.remainingFundsBox.children[0]).style.left = (rfbWidth/2-padding).toString()+'px';
       this.remainingFundsBox.style.left = (x - this.remainingFundsBox.clientWidth/2).toString() + 'px';
     }
     else
