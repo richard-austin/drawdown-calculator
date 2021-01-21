@@ -4,7 +4,7 @@
   </mat-card-title>
   <div class="flex-container">
     <mat-card-content class="mat-elevation-z8 dc-input-form">
-      <form (submit)="$event.preventDefault(); formSubmitted()" [formGroup]="drawdowndataForm">
+      <form (submit)="$event.preventDefault(); formSubmitted()" [formGroup]="drawDownDataForm">
         <mat-form-field>
           <mat-label>
             Fund Amount
@@ -39,26 +39,34 @@
             Required Annual Income Growth (%)
           </mat-label>
           <input matInput #requiredAnnualIncomeGrowth formControlName="requiredAnnualIncomeGrowth">
-          <mat-error *ngIf="hasError('requiredAnnualIncomeGrowth', 'required')">Required Annual Income Growth is required</mat-error>
-          <mat-error *ngIf="hasError('requiredAnnualIncomeGrowth', 'pattern')">Required Annual Income Growth should be a number</mat-error>
-       </mat-form-field>
+          <mat-error *ngIf="hasError('requiredAnnualIncomeGrowth', 'required')">Required Annual Income Growth is
+            required
+          </mat-error>
+          <mat-error *ngIf="hasError('requiredAnnualIncomeGrowth', 'pattern')">Required Annual Income Growth should be a
+            number
+          </mat-error>
+        </mat-form-field>
         <div>
-          <button mat-flat-button color="primary" [disabled]="!drawdowndataForm.valid">Calculate</button>
-          <button type="button" (click)="cancel()" mat-flat-button>Cancel</button>
+          <button mat-flat-button color="primary" [disabled]="!drawDownDataForm.valid">Calculate</button>
+          <button type="button" color="accent" (click)="cancel()" mat-flat-button>Cancel</button>
+          <mat-checkbox [checked]="bIsGraph" (change)="setIsGraph($event.checked)" [color]="'primary'">Graph</mat-checkbox>
         </div>
       </form>
     </mat-card-content>
-    <mat-card-content class="table-container">
+    <mat-card-content class="table-container" [style]="'display: ' + (!bIsGraph || drawdownData.length == 0 ? 'none' : 'block')">
+      <app-graphing [drawdownData]="drawdownData"></app-graphing>
+    </mat-card-content>
+    <mat-card-content  class="table-container" [style]="'display:' + (bIsGraph ? 'none' : 'block')">
       <table *ngIf="drawdownData.length > 0" mat-table [dataSource]="drawdownData" class="mat-elevation-z8">
         <!-- Year number Column -->
         <ng-container matColumnDef="yearNum">
-          <th mat-header-cell *matHeaderCellDef> Year No. </th>
+          <th mat-header-cell *matHeaderCellDef> Year No.</th>
           <td mat-cell *matCellDef="let element"> {{element.yearNum}} </td>
         </ng-container>
 
         <!-- Remaining funds Column -->
         <ng-container matColumnDef="remainingFunds">
-          <th mat-header-cell *matHeaderCellDef> Remaining Funds </th>
+          <th mat-header-cell *matHeaderCellDef> Remaining Funds</th>
           <td mat-cell *matCellDef="let element"> {{element.remainingFunds.toFixed(2)}} </td>
         </ng-container>
 
@@ -70,13 +78,13 @@
 
         <!-- Year number Column (right)-->
         <ng-container matColumnDef="yearNumRight">
-          <th mat-header-cell *matHeaderCellDef> Year No. </th>
+          <th mat-header-cell *matHeaderCellDef> Year No.</th>
           <td mat-cell *matCellDef="let element"> {{element.yearNumRight}} </td>
         </ng-container>
 
         <!-- Remaining funds Column (right)-->
         <ng-container matColumnDef="remainingFundsRight">
-          <th mat-header-cell *matHeaderCellDef> Remaining Funds </th>
+          <th mat-header-cell *matHeaderCellDef> Remaining Funds</th>
           <td mat-cell *matCellDef="let element"> {{element.remainingFundsRight.toFixed(2)}} </td>
         </ng-container>
 
