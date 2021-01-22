@@ -53,11 +53,11 @@
         </div>
       </form>
     </mat-card-content>
-    <mat-card-content class="table-container" [style]="'display: ' + (!bIsGraph || drawdownData.length == 0 ? 'none' : 'block')">
+    <mat-card-content class="table-container" [style]="'display: ' + (!bIsGraph || drawdownDataDualCol.length == 0 ? 'none' : 'block')">
       <app-graphing [drawdownData]="drawdownData"></app-graphing>
     </mat-card-content>
     <mat-card-content  class="table-container" [style]="'display:' + (bIsGraph ? 'none' : 'block')">
-      <table *ngIf="drawdownData.length > 0" mat-table [dataSource]="drawdownData" class="mat-elevation-z8">
+      <table *ngIf="drawdownDataDualCol.length > 0" mat-table [dataSource]="drawdownDataDualCol" class="mat-elevation-z8">
         <!-- Year number Column -->
         <ng-container matColumnDef="yearNum">
           <th mat-header-cell *matHeaderCellDef> Year No.</th>

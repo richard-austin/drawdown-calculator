@@ -1,10 +1,11 @@
 
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { YearTotal } from '../classes/YearTotal';
+import { YearTotalDualCol } from '../classes/YearTotalDualCol';
 import {GraphingComponent} from "../graphing/graphing.component";
-import {tap} from "rxjs/operators";
+import {max, tap} from "rxjs/operators";
 import {Subscription, timer} from "rxjs";
+import {YearTotal} from "../classes/YearTotal";
 
 @Component({
   selector: 'app-input-form',
@@ -17,12 +18,15 @@ export class InputFormComponent implements OnInit, OnDestroy {
   @ViewChild('expectedAnnualFundGrowth', { read: ElementRef }) expectedAnnualFundGrowthEL!: ElementRef<HTMLInputElement>;
   @ViewChild('requiredAnnualIncomeGrowth', { read: ElementRef }) requiredAnnualIncomeGrowthEL!: ElementRef<HTMLInputElement>;
   @ViewChild(GraphingComponent) graph!:GraphingComponent;
+
   fundAmount!: number;
   drawdownAmount!: number;
   expectedAnnualFundGrowth!: number;
   requiredAnnualIncomeGrowth!: number;
 
+  drawdownDataDualCol: YearTotalDualCol[] = [];
   drawdownData: YearTotal[] = [];
+
   displayedColumns: string[] = ['yearNum', 'remainingFunds', 'annualIncome', 'yearNumRight', 'remainingFundsRight', 'annualIncomeRight'];
 
   drawDownDataForm!: FormGroup;
@@ -31,7 +35,7 @@ export class InputFormComponent implements OnInit, OnDestroy {
   constructor() { }
 
  cancel() {
-    this.drawdownData = [];
+    this.drawdownDataDualCol = [];
   }
 
   formSubmitted() {
@@ -46,37 +50,27 @@ export class InputFormComponent implements OnInit, OnDestroy {
    * calculateDrawdown: Calculate the the balance for each year, starting from the initial fund
    */
   calculateDrawdown() {
-    this.drawdownData = [];
+    this.drawdownDataDualCol = [];
     const totalYears: number = 40;
     const maxRows: number = totalYears / 2;
 
-    for (let i = 0; i < 40; ++i) {
+    // Build the drawdown data array
+    this.drawdownData = [];
+    for (let i = 0; i < totalYears; ++i) {
       if (this.fundAmount > 0) {
-        if (i >= maxRows) {
-          let thisRow: YearTotal = this.drawdownData[i - maxRows];
-          thisRow.remainingFundsRight = this.fundAmount;
-          thisRow.yearNumRight = i;
-          thisRow.annualIncomeRight = this.drawdownAmount > this.fundAmount ? this.fundAmount : this.drawdownAmount;
-        }
-        else
-          this.drawdownData.push(new YearTotal({ yearNum: i, remainingFunds: this.fundAmount, annualIncome: this.drawdownAmount > this.fundAmount ? this.fundAmount : this.drawdownAmount }));
+        this.drawdownData.push(new YearTotal({
+          yearNum: i,
+          remainingFunds: this.fundAmount,
+          annualIncome: this.drawdownAmount > this.fundAmount ? this.fundAmount : this.drawdownAmount
+        }));
+      } else {
+        this.drawdownData.push(new YearTotal({yearNum: i, remainingFunds: 0, annualIncome: 0}));
       }
-      else {
-        if (i >= maxRows) {
-          let thisRow: YearTotal = this.drawdownData[i - maxRows];
-          thisRow.remainingFundsRight = 0;
-          thisRow.yearNumRight = i;
-          thisRow.annualIncomeRight = 0;
-        }
-        else
-          this.drawdownData.push(new YearTotal({ yearNum: i, remainingFunds: 0, annualIncome: 0 }));
-      }
-
       this.depreciateOneYear();
-
-      this.drawdownAmount += this.drawdownAmount * this.requiredAnnualIncomeGrowth / 100;
-
     }
+
+    // Build the drawdown data array for the dual column table
+    this.drawdownDataDualCol = this.transformToDualCol(this.drawdownData, maxRows);
 
     this.timerSub?.unsubscribe();
     this.timerSub = timer(100).pipe(tap(() => this.graph.draw())).subscribe();
@@ -94,6 +88,9 @@ export class InputFormComponent implements OnInit, OnDestroy {
       this.fundAmount = this.fundAmount * monthlyFundGrowth;
       this.fundAmount -= monthlyDrawdown;
     }
+
+    // Increase by the expected annual income growth
+    this.drawdownAmount += this.drawdownAmount * this.requiredAnnualIncomeGrowth / 100;
   }
 
   hasError = (controlName: string, errorName: string):boolean =>{
@@ -103,6 +100,33 @@ export class InputFormComponent implements OnInit, OnDestroy {
   setIsGraph(checked: boolean):void {
     this.bIsGraph = checked;
   }
+
+  transformToDualCol(drawdownData: YearTotal[], maxRows: number): YearTotalDualCol[]
+  {
+    let retVal: YearTotalDualCol[] = [];
+    let i = 0;
+    drawdownData.forEach(row => {
+      if(i >= maxRows)
+      {
+        let rowDualCol: YearTotalDualCol = retVal[i-maxRows];
+        rowDualCol.annualIncomeRight = row.annualIncome;
+        rowDualCol.remainingFundsRight = row.remainingFunds;
+        rowDualCol.yearNumRight = row.yearNum;
+      }
+      else
+      {
+        let rowDualCol: YearTotalDualCol = new YearTotalDualCol();
+        rowDualCol.annualIncome = row.annualIncome;
+        rowDualCol.remainingFunds = row.remainingFunds;
+        rowDualCol.yearNum = row.yearNum;
+        retVal.push(rowDualCol);
+      }
+      ++i;
+    });
+
+    return retVal;
+  }
+
   ngOnInit(): void {
     this.drawDownDataForm = new FormGroup({
       fundAmount: new FormControl('', [Validators.required, Validators.min(0), Validators.pattern(/^[\-+]?[0-9]*\.?[0-9]+$/)]),
