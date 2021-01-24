@@ -46,6 +46,7 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
   width: number = this.graphDimensions.width;
   height: number = this.graphDimensions.height;
   private graphCanvas!: HTMLCanvasElement;
+  private scale: number = 1;
 
   constructor() {
   }
@@ -190,7 +191,7 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.annualIncomeBoxEl && !this.annualIncomeBox)
       this.annualIncomeBox = this.annualIncomeBoxEl.nativeElement;
 
-    let yearNum: number = Math.ceil((x - this.xOffset) / this.xScale);
+    let yearNum: number = Math.ceil((x/this.scale - this.xOffset) / this.xScale);
 
     if (yearNum >= 0 && yearNum < 40) {
       // Remaining funds floating box
@@ -201,7 +202,7 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
       let rfbRect: DOMRect = this.remainingFundsBox.getBoundingClientRect();
       let rfbWidth: number = rfbRect.width;
       let padding = 3.2;
-      this.remainingFundsBox.style.top = (this.drawdownData[yearNum].remainingFunds * this.yScale + this.yOffset - this.graphDimensions.height).toString() + 'px';
+      this.remainingFundsBox.style.top = (this.drawdownData[yearNum].remainingFunds * this.yScale*this.scale + this.yOffset*this.scale - this.graphDimensions.height*this.scale).toString() + 'px';
 
       // Centre the pointer on top of the box
       (<HTMLDivElement>this.remainingFundsBox.children[0]).style.left = (rfbWidth / 2 - padding).toString() + 'px';
@@ -214,7 +215,7 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.annualIncome = this.drawdownData[yearNum].annualIncome.toFixed(2);
       rfbRect = this.annualIncomeBox.getBoundingClientRect();
       rfbWidth = rfbRect.width;
-      this.annualIncomeBox.style.top = (this.drawdownData[yearNum].annualIncome * this.yScaleInc + this.yOffset - this.graphDimensions.height).toString() + 'px';
+      this.annualIncomeBox.style.top = (this.drawdownData[yearNum].annualIncome * this.yScaleInc*this.scale + this.yOffset*this.scale - this.graphDimensions.height*this.scale).toString() + 'px';
 
       // Centre the pointer on top of the box
       (<HTMLDivElement>this.annualIncomeBox.children[0]).style.left = (rfbWidth / 2 - padding).toString() + 'px';
@@ -233,12 +234,10 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
   setScale(): void {
     let windowWidth: number = window.innerWidth;
 
-    let scale: number;
-
-    scale = windowWidth < this.graphDimensions.width ? windowWidth / this.graphDimensions.width : 1;
-    this.graphCanvas.width = this.graphDimensions.width * scale;
-    this.graphCanvas.height = this.graphDimensions.height * scale;
-    this.graphCtx?.scale(scale, scale);
+    this.scale = windowWidth < this.graphDimensions.width ? windowWidth / this.graphDimensions.width : 1;
+    this.graphCanvas.width = this.graphDimensions.width * this.scale;
+    this.graphCanvas.height = this.graphDimensions.height * this.scale;
+    this.graphCtx?.scale(this.scale, this.scale);
   }
 
   ngOnInit(): void {
@@ -256,6 +255,4 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.windowResizeHandle?.unsubscribe();
     this.timerHandle?.unsubscribe();
   }
-
-
 }
