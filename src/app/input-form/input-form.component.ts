@@ -3,8 +3,8 @@ import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { YearTotalDualCol } from '../classes/YearTotalDualCol';
 import {GraphingComponent} from "../graphing/graphing.component";
-import {max, tap} from "rxjs/operators";
-import {Subscription, timer} from "rxjs";
+import {max, takeUntil, tap} from "rxjs/operators";
+import {fromEvent, Subscription, timer} from "rxjs";
 import {YearTotal} from "../classes/YearTotal";
 
 @Component({
@@ -27,11 +27,15 @@ export class InputFormComponent implements OnInit, OnDestroy {
   drawdownDataDualCol: YearTotalDualCol[] = [];
   drawdownData: YearTotal[] = [];
 
-  displayedColumns: string[] = ['yearNum', 'remainingFunds', 'annualIncome', 'yearNumRight', 'remainingFundsRight', 'annualIncomeRight'];
+  displayedColumnsDualCol: string[] = ['yearNum', 'remainingFunds', 'annualIncome', 'yearNumRight', 'remainingFundsRight', 'annualIncomeRight'];
+  displayedColumns: string[] = ['yearNum', 'remainingFunds', 'annualIncome'];
 
   drawDownDataForm!: FormGroup;
   timerSub:Subscription | null= null;
   bIsGraph: boolean = false;
+  narrowWidth: number = 700;
+  bSingleColumn: boolean = window.innerWidth < this.narrowWidth;
+
   constructor() { }
 
  cancel() {
@@ -126,6 +130,7 @@ export class InputFormComponent implements OnInit, OnDestroy {
 
     return retVal;
   }
+  windowResizeHandle!: Subscription;
 
   ngOnInit(): void {
     this.drawDownDataForm = new FormGroup({
@@ -134,9 +139,22 @@ export class InputFormComponent implements OnInit, OnDestroy {
       expectedAnnualFundGrowth: new FormControl('', [Validators.required, Validators.pattern(/^[\-+]?[0-9]*\.?[0-9]+$/)]),
       requiredAnnualIncomeGrowth: new FormControl('', [Validators.required, Validators.pattern(/^[\-+]?[0-9]*\.?[0-9]+$/)])
     });
+
+    this.windowResizeHandle = fromEvent(window, 'resize').subscribe((e:Event) =>
+    {
+      let window:Window | null = <Window>e.currentTarget;
+      let windowWidth: number = window.innerWidth;
+
+      if(windowWidth < this.narrowWidth)
+        this.bSingleColumn = true;
+      else
+        this.bSingleColumn = false;
+    });
   }
 
+
   ngOnDestroy(): void {
-      this.timerSub?.unsubscribe();
+    this.windowResizeHandle?.unsubscribe();
+    this.timerSub?.unsubscribe();
   }
 }
