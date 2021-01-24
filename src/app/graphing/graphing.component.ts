@@ -20,9 +20,8 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private windowResizeHandle!: Subscription;
   private narrowWidth: number = 700;
-  bSingleColumn: boolean = window.innerWidth < this.narrowWidth;
 
-  readonly wide: GraphDimensions = new GraphDimensions({
+  readonly graphDimensions: GraphDimensions = new GraphDimensions({
     height: 400,
     width: 950,
     topBorder: 20,
@@ -31,16 +30,6 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
     bottomBorder: 60,
     textHeight: 10
   });
-  readonly narrow: GraphDimensions = new GraphDimensions({
-    height: 210,
-    width: 350,
-    topBorder: 20,
-    leftBorder: 70,
-    rightBorder: 60,
-    bottomBorder: 40,
-    textHeight: 8
-  });
-  graphDimensions: GraphDimensions = this.bSingleColumn ? this.narrow : this.wide;
 
   yScale!: number;
   yOffset!: number;
@@ -54,19 +43,29 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
   remainingFundsBox!: HTMLDivElement;
   annualIncomeBox!: HTMLDivElement;
   private timerHandle!: Subscription;
+  width: number = this.graphDimensions.width;
+  height: number = this.graphDimensions.height;
+  private graphCanvas!: HTMLCanvasElement;
 
   constructor() {
   }
 
   draw(): void {
+    this.graphCtx?.save();
+    this.timerHandle?.unsubscribe();
+    this.setScale();
+    this.timerHandle = timer(1).subscribe(() => {
+      this.doDraw();
+      this.graphCtx?.restore();
+    });
+  }
+
+  private doDraw(): void {
     // Find maximum and minimum values of remaining funds and build a linear array from the dual column data
     let maxFunds = 0;
     let minFunds = 0;
     let maxIncome = this.drawdownData[0].annualIncome;
     let minIncome = maxIncome;
-
-    let graphCanvas: HTMLCanvasElement = this.graphCanvasEl.nativeElement;
-    this.graphCtx = graphCanvas.getContext('2d');
 
     if (this.graphCtx) {
       // Find the max and min funds and income amounts
@@ -231,34 +230,26 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.annualIncomeBox.style.visibility = 'hidden';
   }
 
+  setScale(): void {
+    let windowWidth: number = window.innerWidth;
+
+    let scale: number;
+
+    scale = windowWidth < this.graphDimensions.width ? windowWidth / this.graphDimensions.width : 1;
+    this.graphCanvas.width = this.graphDimensions.width * scale;
+    this.graphCanvas.height = this.graphDimensions.height * scale;
+    this.graphCtx?.scale(scale, scale);
+  }
+
   ngOnInit(): void {
     this.windowResizeHandle = fromEvent(window, 'resize').subscribe((e: Event) => {
-      let window: Window | null = <Window>e.currentTarget;
-      let windowWidth: number = window.innerWidth;
-
-      if (windowWidth < this.narrowWidth) {
-        this.graphDimensions = this.narrow;
-        if (!this.bSingleColumn) {
-          this.bSingleColumn = true;
-          this.timerHandle?.unsubscribe();
-          this.timerHandle = timer(100).subscribe(() => {
-            this.draw();
-          });
-        }
-      } else {
-        this.graphDimensions = this.wide;
-        if (this.bSingleColumn) {
-          this.bSingleColumn = false;
-          this.timerHandle?.unsubscribe();
-          this.timerHandle = timer(100).subscribe(() => {
-            this.draw();
-          });
-        }
-      }
+      this.draw();
     });
   }
 
   ngAfterViewInit(): void {
+    this.graphCanvas = this.graphCanvasEl.nativeElement;
+    this.graphCtx = this.graphCanvas.getContext('2d');
   }
 
   ngOnDestroy(): void {
