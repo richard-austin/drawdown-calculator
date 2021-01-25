@@ -13,6 +13,10 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { GraphingComponent } from './graphing/graphing.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faCheckSquare, faCheckSquare as farCheckSquare, faQuestionCircle, faSquare as farSquare, faSquare } from '@fortawesome/free-regular-svg-icons';
+import { faGithub, faMedium, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
+import { faFish } from '@fortawesome/free-solid-svg-icons';
 
 
 @NgModule({
@@ -24,6 +28,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    FontAwesomeModule,
     AppRoutingModule,
     MatFormFieldModule,
     ReactiveFormsModule,
@@ -37,4 +42,9 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private library: FaIconLibrary) {
+    library.addIcons(faFish, faQuestionCircle);
+    let x = this.library;
+  }
+}
