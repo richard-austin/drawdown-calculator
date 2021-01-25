@@ -53,11 +53,11 @@
         </div>
       </form>
     </mat-card-content>
-    <mat-card-content class="table-container" [style]="'display: ' + (!bIsGraph || drawdownData.length == 0 ? 'none' : 'block')">
+    <mat-card-content class="table-container" [style]="'display: ' + (!bIsGraph || drawdownDataDualCol.length == 0 ? 'none' : 'block')">
       <app-graphing [drawdownData]="drawdownData"></app-graphing>
     </mat-card-content>
-    <mat-card-content  class="table-container" [style]="'display:' + (bIsGraph ? 'none' : 'block')">
-      <table *ngIf="drawdownData.length > 0" mat-table [dataSource]="drawdownData" class="mat-elevation-z8">
+    <mat-card-content  [style]="'display:' + (bIsGraph ? 'none' : 'block')">
+      <table *ngIf="!bSingleColumn && drawdownDataDualCol.length > 0" mat-table [dataSource]="drawdownDataDualCol" class="mat-elevation-z8">
         <!-- Year number Column -->
         <ng-container matColumnDef="yearNum">
           <th mat-header-cell *matHeaderCellDef> Year No.</th>
@@ -93,10 +93,36 @@
           <th mat-header-cell *matHeaderCellDef> Annual Income</th>
           <td mat-cell *matCellDef="let element"> {{element.annualIncomeRight.toFixed(2)}} </td>
         </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsDualCol"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsDualCol;"></tr>
+
+      </table>
+
+
+      <table *ngIf="bSingleColumn && drawdownData.length > 0" mat-table [dataSource]="drawdownData" class="mat-elevation-z8">
+        <!-- Year number Column -->
+        <ng-container matColumnDef="yearNum">
+          <th mat-header-cell *matHeaderCellDef> Year No.</th>
+          <td mat-cell *matCellDef="let element"> {{element.yearNum}} </td>
+        </ng-container>
+
+        <!-- Remaining funds Column -->
+        <ng-container matColumnDef="remainingFunds">
+          <th mat-header-cell *matHeaderCellDef> Remaining Funds</th>
+          <td mat-cell *matCellDef="let element"> {{element.remainingFunds.toFixed(2)}} </td>
+        </ng-container>
+
+        <!-- Annual Income Column -->
+        <ng-container matColumnDef="annualIncome">
+          <th mat-header-cell *matHeaderCellDef> Annual Income</th>
+          <td mat-cell *matCellDef="let element"> {{element.annualIncome.toFixed(2)}} </td>
+        </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
       </table>
+
     </mat-card-content>
   </div>
 </mat-card>

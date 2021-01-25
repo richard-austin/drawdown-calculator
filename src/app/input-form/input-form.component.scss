@@ -11,11 +11,12 @@ mat-form-field
 .flex-container
 {
    display: flex;
+   flex-wrap: wrap;
 }
 
 .table-container
 {
-    margin-left: 4rem;
+   // margin-left: 4rem;
 }
 
 th[class~="mat-header-cell"]
@@ -29,11 +30,11 @@ th[class~="mat-header-cell"]
 tr[class~="mat-header-row"]
 {
     background-color: rgb(61, 61, 165);
-
 }
 
 .dc-input-form
 {
     padding: 2em;
+    margin-right: 3rem;
     height: fit-content;
 }
