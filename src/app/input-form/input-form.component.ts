@@ -40,6 +40,7 @@ export class InputFormComponent implements OnInit, OnDestroy {
 
  cancel() {
     this.drawdownDataDualCol = [];
+    this.drawdownData = [];
   }
 
   formSubmitted() {
