@@ -14,10 +14,16 @@ mat-form-field
    flex-wrap: wrap;
 }
 
-.table-container
-{
-   // margin-left: 4rem;
-}
+ .grey { background-color: #e5e3e3
+ }
+  .table-row
+ {
+   &:hover > td
+     {
+       border-top:rgb(61, 61, 165) solid 2px;
+       border-bottom:rgb(61, 61, 165) solid 2px;
+     }
+ }
 
 th[class~="mat-header-cell"]
 {
@@ -37,4 +43,5 @@ tr[class~="mat-header-row"]
     padding: 2em;
     margin-right: 3rem;
     height: fit-content;
+ //   background-color: #f5f4f4;
 }
