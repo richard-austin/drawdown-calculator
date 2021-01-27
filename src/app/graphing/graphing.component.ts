@@ -92,8 +92,8 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // Fill in the graph background
       let gradient: CanvasGradient = this.graphCtx.createLinearGradient(0, 0, this.graphDimensions.width, this.graphDimensions.height);
-      gradient.addColorStop(0, '#d8d8ee');
-      gradient.addColorStop(1, '#ffffff');
+      gradient.addColorStop(0, '#323232');
+      gradient.addColorStop(1, '#101010');
       this.graphCtx.fillStyle = gradient;
       this.graphCtx.fillRect(0, 0, this.graphDimensions.width, this.graphDimensions.height);
 
@@ -102,7 +102,7 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // Draw the the annual income curve
       this.graphCtx.lineWidth = 0.5;
-      this.graphCtx.strokeStyle = '#fd0000';
+      this.graphCtx.strokeStyle = '#ff8080';
 
       this.graphCtx.moveTo(this.drawdownData[0].yearNum * this.xScale + this.xOffset, this.drawdownData[0].annualIncome * this.yScaleInc + this.yOffset);
       this.graphCtx.beginPath();
@@ -113,7 +113,7 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.graphCtx.stroke();
 
       // Draw the remaining funds curve
-      this.graphCtx.strokeStyle = '#ff00ff';
+      this.graphCtx.strokeStyle = '#ff80ff';
       this.graphCtx.moveTo(this.drawdownData[0].yearNum * this.xScale + this.xOffset, this.drawdownData[0].remainingFunds * this.yScale + this.yOffset);
       this.graphCtx.beginPath();
       this.drawdownData.forEach((yearTotals: YearTotal) => {
@@ -128,13 +128,13 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
   {
     if(this.graphCtx)
     {
-      this.graphCtx.fillStyle = '#000000';
+      this.graphCtx.fillStyle = '#f8f8f8';
 
       // set up the x calibration
       const years: number = this.drawdownData.length;
       this.graphCtx.beginPath();
       this.graphCtx.lineWidth = 0.25;
-      this.graphCtx.strokeStyle = '#474646';
+      this.graphCtx.strokeStyle = '#f8f8f8';
       this.graphCtx.font = this.graphDimensions.textHeight + "px Arial";
       // x axis calibration
       for (let i = 0; i <= years; i += 5) {

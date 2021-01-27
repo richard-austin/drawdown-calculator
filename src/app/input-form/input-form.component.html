@@ -1,6 +1,6 @@
 <mat-card class="dc-page">
   <mat-card-title>Pension Drawdown Calculator
-    <button title="Click to show help information" (click)="showHelp()" mat-icon-button color="primary">
+    <button title="Click to show help information" (click)="showHelp()" mat-icon-button class="help-button">
       <fa-icon [icon]="['far', 'question-circle']" size="lg"></fa-icon>
     </button>
   </mat-card-title>
@@ -55,7 +55,7 @@
         </mat-form-field>
         <br>
         <div>
-          <button mat-flat-button color="primary" [disabled]="!drawDownDataForm.valid">Calculate</button>
+          <button mat-flat-button class="calc-button" [disabled]="!drawDownDataForm.valid">Calculate</button>
           <button type="button" color="accent" (click)="cancel()" mat-flat-button>Cancel</button>
           <mat-checkbox [checked]="bIsGraph" (change)="setIsGraph($event.checked)" [color]="'primary'">Graph
           </mat-checkbox>
@@ -108,7 +108,7 @@
         <tr class="table-row" mat-row *matRowDef="
                         let row;
                         let even = even;
-                        let odd = odd;
+                        let odd = oddr;
                         columns: displayedColumnsDualCol;" [ngClass]="{grey: even}">
         </tr>
 
