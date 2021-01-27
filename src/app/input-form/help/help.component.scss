@@ -1,0 +1,14 @@
+div.help-page
+{
+   background-color: #e8f0fe;
+   padding: 1rem;
+   margin: -8px;
+
+   >div>img
+   {
+     margin-top: 1rem;
+    -webkit-box-shadow: 7px 7px 15px 0px rgba(126, 87, 28, 0.8);
+    -moz-box-shadow:    7px 7px 15px 0px rgba(126, 87, 28, 0.8);
+    box-shadow:         7px 7px 15px 0px rgba(126, 87, 28, 0.8);
+   }
+}

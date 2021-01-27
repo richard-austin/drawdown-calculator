@@ -1,11 +1,30 @@
+@import '../../styles.scss';
+
 button
 {
     margin-right: 1rem;
-}
+      &.calc-button
+      {
+          background-color: blueviolet;
+      }
+    }
 
 mat-form-field
 {
     width: 18rem;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active  {
+//  -webkit-box-shadow: 0 0 0 30px mat-color($primary, A700) inset;
+  box-shadow: 0 0 0 30px  mat-color($primary, A700) inset;
+  -webkit-text-fill-color: mat-color($primary, 100);
+}
+.help-button
+{
+    color: mat-color($primary, 900);
 }
 
 .flex-container
@@ -14,22 +33,34 @@ mat-form-field
    flex-wrap: wrap;
 }
 
-.table-container
-{
-   // margin-left: 4rem;
-}
+ .grey { background-color: #3a3939
+ }
+
+.table-row
+ {
+   &:hover > td
+     {
+       border-top:rgb(61, 61, 165) solid 2px;
+       border-bottom:rgb(61, 61, 165) solid 2px;
+     }
+ }
 
 th[class~="mat-header-cell"]
 {
     font-size: medium;
     font-weight: bold;
     padding-right: 3rem;
-    color: yellow;
+    color: rgb(185, 185, 5);
 }
 
 tr[class~="mat-header-row"]
 {
-    background-color: rgb(61, 61, 165);
+    background-color: rgb(0, 0, 0);
+}
+
+input
+{
+    caret-color: black;
 }
 
 .dc-input-form
@@ -37,4 +68,5 @@ tr[class~="mat-header-row"]
     padding: 2em;
     margin-right: 3rem;
     height: fit-content;
+ //   background-color: #f5f4f4;
 }

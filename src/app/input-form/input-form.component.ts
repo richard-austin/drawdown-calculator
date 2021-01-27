@@ -40,6 +40,7 @@ export class InputFormComponent implements OnInit, OnDestroy {
 
  cancel() {
     this.drawdownDataDualCol = [];
+    this.drawdownData = [];
   }
 
   formSubmitted() {
@@ -130,6 +131,11 @@ export class InputFormComponent implements OnInit, OnDestroy {
 
     return retVal;
   }
+
+  showHelp(): void{
+      window.open('/help');
+  }
+
   windowResizeHandle!: Subscription;
 
   ngOnInit(): void {
