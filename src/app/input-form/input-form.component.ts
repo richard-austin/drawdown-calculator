@@ -35,6 +35,7 @@ export class InputFormComponent implements OnInit, OnDestroy {
   bIsGraph: boolean = false;
   narrowWidth: number = 700;
   bSingleColumn: boolean = window.innerWidth < this.narrowWidth;
+  bShowHelp: boolean = false;
 
   constructor() { }
 
@@ -133,7 +134,8 @@ export class InputFormComponent implements OnInit, OnDestroy {
   }
 
   showHelp(): void{
-      window.open('/help');
+    this.bShowHelp = !this.bShowHelp;
+      //window.open('/help');
   }
 
   windowResizeHandle!: Subscription;

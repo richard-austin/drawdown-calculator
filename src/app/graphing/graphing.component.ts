@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChil
 import {YearTotal} from "../classes/YearTotal";
 import {GraphDimensions} from "../classes/GraphDimensions";
 import {fromEvent, Subscription, timer} from "rxjs";
+import { mixinColor } from '@angular/material/core';
 
 @Component({
   selector: 'app-graphing',
@@ -102,7 +103,7 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // Draw the the annual income curve
       this.graphCtx.lineWidth = 0.5;
-      this.graphCtx.strokeStyle = '#ff8080';
+      this.graphCtx.strokeStyle = '#ff0000';
 
       this.graphCtx.moveTo(this.drawdownData[0].yearNum * this.xScale + this.xOffset, this.drawdownData[0].annualIncome * this.yScaleInc + this.yOffset);
       this.graphCtx.beginPath();
@@ -192,9 +193,9 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  showValues($event: MouseEvent): void {
+  showValues($event: MouseEvent | TouchEvent): void {
     let rect: DOMRect = this.graphCanvasEl.nativeElement.getBoundingClientRect();
-    let x: number = $event.clientX - rect.left;
+    let x: number = ($event instanceof MouseEvent ? $event.clientX : $event.touches[0].clientX)- rect.left;
     //   let y = $event.clientY - rect.top;
 
     if (this.fundsRemainingBoxEl && !this.remainingFundsBox)

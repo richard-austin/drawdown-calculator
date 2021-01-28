@@ -1,72 +1,94 @@
-@import '../../styles.scss';
+@import "../../styles.scss";
 
-button
-{
-    margin-right: 1rem;
-      &.calc-button
-      {
-          background-color: blueviolet;
-      }
-    }
+button {
+  margin-right: 1rem;
+  &.calc-button {
+    background-color: mat-color($primary, A400);
+  }
+}
 
-mat-form-field
-{
-    width: 18rem;
+mat-form-field {
+  width: 18rem;
 }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
-input:-webkit-autofill:active  {
-//  -webkit-box-shadow: 0 0 0 30px mat-color($primary, A700) inset;
-  box-shadow: 0 0 0 30px  mat-color($primary, A700) inset;
+input:-webkit-autofill:active {
+  //  -webkit-box-shadow: 0 0 0 30px mat-color($primary, A700) inset;
+  box-shadow: 0 0 0 30px mat-color($primary, A700) inset;
   -webkit-text-fill-color: mat-color($primary, 100);
 }
-.help-button
-{
-    color: mat-color($primary, 900);
+.help-button {
+  color: mat-color($primary, 900);
 }
 
-.flex-container
-{
-   display: flex;
-   flex-wrap: wrap;
+div.help {
+  position: relative;
+  @media only screen and (min-width: 60rem) {
+    left: 20rem;
+  }
+
+  > app-help {
+    top: 12px;
+    position: absolute;
+    z-index: 2;
+  }
+
+  > div:first-child {
+    position: absolute;
+    top: -5px;
+
+    left: 16px;
+
+    @media only screen and (max-width: 60rem) {
+      left: 21rem;
+    }
+
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+
+    border-bottom: 10px solid rgb(197, 197, 197);
+    z-index: 3;
+  }
 }
 
- .grey { background-color: #3a3939
- }
-
-.table-row
- {
-   &:hover > td
-     {
-       border-top:rgb(61, 61, 165) solid 2px;
-       border-bottom:rgb(61, 61, 165) solid 2px;
-     }
- }
-
-th[class~="mat-header-cell"]
-{
-    font-size: medium;
-    font-weight: bold;
-    padding-right: 3rem;
-    color: rgb(185, 185, 5);
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
 }
 
-tr[class~="mat-header-row"]
-{
-    background-color: rgb(0, 0, 0);
+.grey {
+  background-color: #3a3939;
 }
 
-input
-{
-    caret-color: black;
+.table-row {
+  &:hover > td {
+    border-top: rgb(61, 61, 165) solid 2px;
+    border-bottom: rgb(61, 61, 165) solid 2px;
+  }
 }
 
-.dc-input-form
-{
-    padding: 2em;
-    margin-right: 3rem;
-    height: fit-content;
- //   background-color: #f5f4f4;
+th[class~="mat-header-cell"] {
+  font-size: medium;
+  font-weight: bold;
+  padding-right: 3rem;
+  color: rgb(185, 185, 5);
+}
+
+tr[class~="mat-header-row"] {
+  background-color: rgb(0, 0, 0);
+}
+
+input {
+  caret-color: black;
+}
+
+.dc-input-form {
+  padding: 2em;
+  margin-right: 3rem;
+  height: fit-content;
+  //   background-color: #f5f4f4;
 }

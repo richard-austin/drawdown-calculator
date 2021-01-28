@@ -1,11 +1,34 @@
 <div class="help-page">
-  <h1>Pension Drawdown Calculator</h1>
-  <div>This can be used to test income against time for a given initial pension pot, starting annual income, expected
-  appreciation of the fund with the required annual increase in income.</div>
-  <div>The figures are entered on the input form.</div>
-
-  <div>
-    <img src="../../../assets/help/input-form.png" alt="Input Form">
-  </div>
-
+  <h2>Pension Drawdown Calculator</h2>
+  <p>This calculator enables the testing of "what if" scenarios where, given an initial pension fund value, initial drawdown amount,
+    annual fund value increase and annual drawdown amount increase you can see how long your pension fund will last.</p>
+    <p>Note that the pension fund should be the amount remaining after any tax free or other lump sums are taken. Also
+      this calculator does not currently take tax into account.
+    </p>
+  <p>The figures are entered on the input form as follows:-</p>
+  <ul>
+    <li>
+      Fund Amount: Enter the total current pension fund value (after any lump sum values are taken from it). This value should be greater than zero.
+    </li>
+    <li>
+      Annual Drawdown Amount: The initial annual amount you would like to draw down. This value should be greater than zero.
+    </li>
+    <li>
+      Expected Average Annual Fund Growth (%): The estimated annual percentage growth of remaining pension fund given the manner it is invested.
+    </li>
+    <li>
+      Required Annual Income Growth (%): The annual percentage increase you would like on the drawdown income.
+    </li>
+  </ul>
+  When all these values are entered, the
+  <button mat-flat-button class="calc-button" >Calculate</button>
+  button will be enabled. Click on this to show the results with the given figures.
+  <p>The result can be shown either as a table of values, with the remaining funds against income on each successive year, with the initial year being zero, or as a graph
+    where the remaining funds and income are plotted against years from the start. The calibration for the funds curve is on the left, and for the income curve on the right.
+    The remaining funds curve is purple, and the anual income curve is red.
+    <br>
+   To switch between graphical and tabular results, click on the Graph checkbox
+   ( <mat-checkbox [checked]="true" [color]="'primary'"></mat-checkbox> )
+  .
+  </p>
 </div>

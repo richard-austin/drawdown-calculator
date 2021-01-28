@@ -1,9 +1,13 @@
 <mat-card class="dc-page">
   <mat-card-title>Pension Drawdown Calculator
-    <button title="Click to show help information" (click)="showHelp()" mat-icon-button class="help-button">
+    <button title="Click to {{bShowHelp ? 'hide' : 'show'}} help information" (click)="showHelp()" mat-icon-button class="help-button">
       <fa-icon [icon]="['far', 'question-circle']" size="lg"></fa-icon>
     </button>
   </mat-card-title>
+    <div *ngIf="bShowHelp" class="help">
+      <div></div>
+      <app-help></app-help>
+    </div>
   <div class="flex-container">
     <mat-card-content class="mat-elevation-z8 dc-input-form">
       <form (submit)="$event.preventDefault(); formSubmitted()" [formGroup]="drawDownDataForm">
