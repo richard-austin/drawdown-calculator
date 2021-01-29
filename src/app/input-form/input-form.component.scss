@@ -13,6 +13,11 @@ mat-form-field {
 
 .mat-card-title{
   font-size: 23.5px;
+
+  @media only screen and (max-width: 60rem) {
+    font-size: 20px;
+    margin-left: 0.5rem;
+  }
 }
 
 input:-webkit-autofill,
@@ -25,6 +30,10 @@ input:-webkit-autofill:active {
 }
 .help-button {
   color: mat-color($primary, 500);
+  @media only screen and (max-width: 60rem) {
+    margin-right: 0;
+    width: 30px;
+  }
 }
 
 div.help {
@@ -46,7 +55,7 @@ div.help {
     left: 0.7rem;
 
     @media only screen and (max-width: 60rem) {
-      left: 20.7rem;
+      left: 17.8rem;
     }
 
     width: 0;
@@ -92,7 +101,5 @@ input {
 
 .dc-input-form {
   padding: 2em;
-  margin-right: 3rem;
   height: fit-content;
-  //   background-color: #f5f4f4;
 }
