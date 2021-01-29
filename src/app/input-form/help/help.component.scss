@@ -22,8 +22,28 @@ div.help-page
    >div>img
    {
      margin-top: 1rem;
-    -webkit-box-shadow: 7px 7px 15px 0px rgba(126, 87, 28, 0.8);
-    -moz-box-shadow:    7px 7px 15px 0px rgba(126, 87, 28, 0.8);
-    box-shadow:         7px 7px 15px 0px rgba(126, 87, 28, 0.8);
+    -webkit-box-shadow: 7px 7px 15px 0 rgba(126, 87, 28, 0.8);
+    -moz-box-shadow:    7px 7px 15px 0 rgba(126, 87, 28, 0.8);
+    box-shadow:         7px 7px 15px 0 rgba(126, 87, 28, 0.8);
    }
+}
+
+div.remaining-funds-line
+{
+  position: relative;
+  top: -3px;
+  display: inline-block;
+  width: 10rem;
+  height: 1px;
+  background-color: #ffdcff;
+}
+
+div.annual-income-line
+{
+  position: relative;
+  top: -3px;
+  display: inline-block;
+  width: 10rem;
+  height: 1px;
+  background-color: #ffa0a0;
 }

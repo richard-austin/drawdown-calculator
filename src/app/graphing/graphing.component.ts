@@ -102,8 +102,8 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.labelAxes(maxFunds, maxIncome, labelIndent);
 
       // Draw the the annual income curve
-      this.graphCtx.lineWidth = 0.5;
-      this.graphCtx.strokeStyle = '#ff0000';
+      this.graphCtx.lineWidth = 1/this.graphDimensions.scale;
+      this.graphCtx.strokeStyle = '#ffa0a0';
 
       this.graphCtx.moveTo(this.drawdownData[0].yearNum * this.xScale + this.xOffset, this.drawdownData[0].annualIncome * this.yScaleInc + this.yOffset);
       this.graphCtx.beginPath();
@@ -114,7 +114,7 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.graphCtx.stroke();
 
       // Draw the remaining funds curve
-      this.graphCtx.strokeStyle = '#ff80ff';
+      this.graphCtx.strokeStyle = '#ffdcff';
       this.graphCtx.moveTo(this.drawdownData[0].yearNum * this.xScale + this.xOffset, this.drawdownData[0].remainingFunds * this.yScale + this.yOffset);
       this.graphCtx.beginPath();
       this.drawdownData.forEach((yearTotals: YearTotal) => {
@@ -134,7 +134,7 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
       // set up the x calibration
       const years: number = this.drawdownData.length;
       this.graphCtx.beginPath();
-      this.graphCtx.lineWidth = 0.25;
+      this.graphCtx.lineWidth = 0.25 /this.graphDimensions.scale;
       this.graphCtx.strokeStyle = '#f8f8f8';
       this.graphCtx.font = this.graphDimensions.textHeight + "px Arial";
       // x axis calibration

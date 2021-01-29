@@ -11,6 +11,10 @@ mat-form-field {
   width: 18rem;
 }
 
+.mat-card-title{
+  font-size: 23.5px;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -20,7 +24,7 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: mat-color($primary, 100);
 }
 .help-button {
-  color: mat-color($primary, 900);
+  color: mat-color($primary, 500);
 }
 
 div.help {
@@ -39,10 +43,10 @@ div.help {
     position: absolute;
     top: -5px;
 
-    left: 16px;
+    left: 0.7rem;
 
     @media only screen and (max-width: 60rem) {
-      left: 21rem;
+      left: 20.7rem;
     }
 
     width: 0;

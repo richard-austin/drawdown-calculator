@@ -133,9 +133,18 @@ export class InputFormComponent implements OnInit, OnDestroy {
     return retVal;
   }
 
-  showHelp(): void{
-    this.bShowHelp = !this.bShowHelp;
-      //window.open('/help');
+  windowClickHandle!: Subscription;
+  showHelp(e:Event): void{
+    if(!this.bShowHelp)  // Don't unset it as this is done by click anywhere
+    {
+      this.bShowHelp = !this.bShowHelp;
+      e.cancelBubble = true;
+      this.windowClickHandle = fromEvent(window, 'click').subscribe((e:Event) => {
+        if(this.bShowHelp)  // Only used to unset show help, click on the button to show it.
+          this.bShowHelp = !this.bShowHelp;
+        this.windowClickHandle?.unsubscribe();
+      });
+    }
   }
 
   windowResizeHandle!: Subscription;
@@ -153,16 +162,14 @@ export class InputFormComponent implements OnInit, OnDestroy {
       let window:Window | null = <Window>e.currentTarget;
       let windowWidth: number = window.innerWidth;
 
-      if(windowWidth < this.narrowWidth)
-        this.bSingleColumn = true;
-      else
-        this.bSingleColumn = false;
+      this.bSingleColumn = windowWidth < this.narrowWidth;
     });
   }
 
 
   ngOnDestroy(): void {
     this.windowResizeHandle?.unsubscribe();
+    this.windowClickHandle?.unsubscribe();
     this.timerSub?.unsubscribe();
   }
 }
