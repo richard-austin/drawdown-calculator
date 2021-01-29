@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChil
 import {YearTotal} from "../classes/YearTotal";
 import {GraphDimensions} from "../classes/GraphDimensions";
 import {fromEvent, Subscription, timer} from "rxjs";
+import { mixinColor } from '@angular/material/core';
 
 @Component({
   selector: 'app-graphing',
@@ -101,8 +102,8 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.labelAxes(maxFunds, maxIncome, labelIndent);
 
       // Draw the the annual income curve
-      this.graphCtx.lineWidth = 0.5;
-      this.graphCtx.strokeStyle = '#ff8080';
+      this.graphCtx.lineWidth = 1/this.graphDimensions.scale;
+      this.graphCtx.strokeStyle = '#ffa0a0';
 
       this.graphCtx.moveTo(this.drawdownData[0].yearNum * this.xScale + this.xOffset, this.drawdownData[0].annualIncome * this.yScaleInc + this.yOffset);
       this.graphCtx.beginPath();
@@ -113,7 +114,7 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.graphCtx.stroke();
 
       // Draw the remaining funds curve
-      this.graphCtx.strokeStyle = '#ff80ff';
+      this.graphCtx.strokeStyle = '#ffdcff';
       this.graphCtx.moveTo(this.drawdownData[0].yearNum * this.xScale + this.xOffset, this.drawdownData[0].remainingFunds * this.yScale + this.yOffset);
       this.graphCtx.beginPath();
       this.drawdownData.forEach((yearTotals: YearTotal) => {
@@ -133,7 +134,7 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
       // set up the x calibration
       const years: number = this.drawdownData.length;
       this.graphCtx.beginPath();
-      this.graphCtx.lineWidth = 0.25;
+      this.graphCtx.lineWidth = 0.25 /this.graphDimensions.scale;
       this.graphCtx.strokeStyle = '#f8f8f8';
       this.graphCtx.font = this.graphDimensions.textHeight + "px Arial";
       // x axis calibration
@@ -192,9 +193,9 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  showValues($event: MouseEvent): void {
+  showValues($event: MouseEvent | TouchEvent): void {
     let rect: DOMRect = this.graphCanvasEl.nativeElement.getBoundingClientRect();
-    let x: number = $event.clientX - rect.left;
+    let x: number = ($event instanceof MouseEvent ? $event.clientX : $event.touches[0].clientX)- rect.left;
     //   let y = $event.clientY - rect.top;
 
     if (this.fundsRemainingBoxEl && !this.remainingFundsBox)

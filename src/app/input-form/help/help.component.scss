@@ -1,14 +1,49 @@
+@import '../../../styles.scss';
+
 div.help-page
 {
-   background-color: #e8f0fe;
-   padding: 1rem;
-   margin: -8px;
+  max-width: 40rem;;
+  background-color: mat-color($primary, 400);
+  color: mat-color($primary, 100);
+  border-radius: 10px;
+  font-size: small;
+  font-weight: 100;
+
+  padding: 1rem;
+  margin: -8px;
+
+  -webkit-box-shadow: 5px 5px 17px 7px rgba(0,0,0,0.92);
+  box-shadow: 5px 5px 17px 7px rgba(0,0,0,0.92);
+
+  >button.calc-button {
+    background-color: mat-color($primary, A400);
+  }
 
    >div>img
    {
      margin-top: 1rem;
-    -webkit-box-shadow: 7px 7px 15px 0px rgba(126, 87, 28, 0.8);
-    -moz-box-shadow:    7px 7px 15px 0px rgba(126, 87, 28, 0.8);
-    box-shadow:         7px 7px 15px 0px rgba(126, 87, 28, 0.8);
+    -webkit-box-shadow: 7px 7px 15px 0 rgba(126, 87, 28, 0.8);
+    -moz-box-shadow:    7px 7px 15px 0 rgba(126, 87, 28, 0.8);
+    box-shadow:         7px 7px 15px 0 rgba(126, 87, 28, 0.8);
    }
+}
+
+div.remaining-funds-line
+{
+  position: relative;
+  top: -3px;
+  display: inline-block;
+  width: 10rem;
+  height: 1px;
+  background-color: #ffdcff;
+}
+
+div.annual-income-line
+{
+  position: relative;
+  top: -3px;
+  display: inline-block;
+  width: 10rem;
+  height: 1px;
+  background-color: #ffa0a0;
 }
