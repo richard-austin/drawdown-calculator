@@ -1,22 +1,24 @@
-<mat-card class="dc-page">
-  <mat-card-title>Pension Drawdown Calculator
-    <button title="Click to {{bShowHelp ? 'hide' : 'show'}} help information" (click)="showHelp($event)" mat-icon-button class="help-button">
-      <fa-icon [icon]="['far', 'question-circle']" size="lg"></fa-icon>
-    </button>
-  </mat-card-title>
+<div class="flex-container">
+  <mat-card class="dc-page mat-elevation-z8">
+    <mat-card-title>Pension Drawdown Calculator
+      <button title="Click to {{bShowHelp ? 'hide' : 'show'}} help information" (click)="showHelp($event)"
+              mat-icon-button class="Help-button">
+        <mat-icon color="primary">help_outline</mat-icon>
+      </button>
+    </mat-card-title>
     <div *ngIf="bShowHelp" class="help">
       <div></div>
       <app-help></app-help>
     </div>
-  <div class="flex-container">
-    <mat-card-content class="mat-elevation-z8 dc-input-form">
+
+    <mat-card-content class="dc-input-form">
       <form (submit)="$event.preventDefault(); formSubmitted()" [formGroup]="drawDownDataForm">
         <mat-form-field>
           <mat-label>
             Fund Amount
           </mat-label>
           <input title="Your pension pot value after lump sum deducted" matInput #fundAmount
-            formControlName="fundAmount">
+                 formControlName="fundAmount">
           <mat-error *ngIf="hasError('fundAmount', 'required')">Fund Amount is required</mat-error>
           <mat-error *ngIf="hasError('fundAmount', 'min')">Fund value should be greater than zero</mat-error>
           <mat-error *ngIf="hasError('fundAmount', 'pattern')">Fund value should be a positive number</mat-error>
@@ -36,12 +38,13 @@
             Expected Average Annual Fund Growth (%)
           </mat-label>
           <input title="Estimated annual growth of your pension fund" matInput #expectedAnnualFundGrowth
-            formControlName="expectedAnnualFundGrowth">
+                 formControlName="expectedAnnualFundGrowth">
 
           <mat-error *ngIf="hasError('expectedAnnualFundGrowth', 'required')">Expected Annual Fund Growth is required
           </mat-error>
           <mat-error *ngIf="hasError('expectedAnnualFundGrowth', 'pattern')">Expected Annual Fund Growth should be a
-            number</mat-error>
+            number
+          </mat-error>
         </mat-form-field>
         <br>
         <mat-form-field>
@@ -49,7 +52,7 @@
             Required Annual Income Growth (%)
           </mat-label>
           <input title="Required annual increase in your drawdown income" matInput #requiredAnnualIncomeGrowth
-            formControlName="requiredAnnualIncomeGrowth">
+                 formControlName="requiredAnnualIncomeGrowth">
           <mat-error *ngIf="hasError('requiredAnnualIncomeGrowth', 'required')">Required Annual Income Growth is
             required
           </mat-error>
@@ -59,20 +62,20 @@
         </mat-form-field>
         <br>
         <div>
-          <button mat-flat-button class="calc-button" [disabled]="!drawDownDataForm.valid">Calculate</button>
+          <button mat-flat-button color="light" [disabled]="!drawDownDataForm.valid">Calculate</button>
           <button type="button" color="accent" (click)="cancel()" mat-flat-button>Cancel</button>
           <mat-checkbox [checked]="bIsGraph" (change)="setIsGraph($event.checked)" [color]="'primary'">Graph
           </mat-checkbox>
         </div>
       </form>
     </mat-card-content>
-    <mat-card-content class="table-container"
-      [style]="'display: ' + (!bIsGraph || drawdownDataDualCol.length == 0 ? 'none' : 'block')">
+  </mat-card>
+  <mat-card class="mat-elevation-z8" [style]="'display: '+ (drawdownDataDualCol.length == 0 ? 'none' : 'block')">
+    <mat-card-content [style]="'display: ' + (!bIsGraph || drawdownDataDualCol.length == 0 ? 'none' : 'block')">
       <app-graphing [drawdownData]="drawdownData"></app-graphing>
     </mat-card-content>
     <mat-card-content [style]="'display:' + (bIsGraph ? 'none' : 'block')">
-      <table *ngIf="!bSingleColumn && drawdownDataDualCol.length > 0" mat-table [dataSource]="drawdownDataDualCol"
-        class="mat-elevation-z8 mat-focused">
+      <table *ngIf="!bSingleColumn && drawdownDataDualCol.length > 0" mat-table [dataSource]="drawdownDataDualCol">
         <!-- Year number Column -->
         <ng-container matColumnDef="yearNum">
           <th mat-header-cell *matHeaderCellDef> Year No.</th>
@@ -120,7 +123,7 @@
 
 
       <table *ngIf="bSingleColumn && drawdownData.length > 0" mat-table [dataSource]="drawdownData"
-        class="mat-elevation-z8">
+             class="mat-elevation-z8">
         <!-- Year number Column -->
         <ng-container matColumnDef="yearNum">
           <th mat-header-cell *matHeaderCellDef> Year No.</th>
@@ -146,7 +149,6 @@
                         columns: displayedColumns;" [ngClass]="{grey: even}"></tr>
 
       </table>
-
     </mat-card-content>
-  </div>
-</mat-card>
+  </mat-card>
+ </div>

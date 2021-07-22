@@ -3,7 +3,7 @@ import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { YearTotalDualCol } from '../classes/YearTotalDualCol';
 import {GraphingComponent} from "../graphing/graphing.component";
-import {max, takeUntil, tap} from "rxjs/operators";
+import {tap} from "rxjs/operators";
 import {fromEvent, Subscription, timer} from "rxjs";
 import {YearTotal} from "../classes/YearTotal";
 
@@ -36,6 +36,7 @@ export class InputFormComponent implements OnInit, OnDestroy {
   narrowWidth: number = 700;
   bSingleColumn: boolean = window.innerWidth < this.narrowWidth;
   bShowHelp: boolean = false;
+  windowClickHandle!: Subscription;
 
   constructor() { }
 
@@ -109,19 +110,19 @@ export class InputFormComponent implements OnInit, OnDestroy {
 
   transformToDualCol(drawdownData: YearTotal[], maxRows: number): YearTotalDualCol[]
   {
-    let retVal: YearTotalDualCol[] = [];
+    const retVal: YearTotalDualCol[] = [];
     let i = 0;
     drawdownData.forEach(row => {
-      if(i >= maxRows)
+      if (i >= maxRows)
       {
-        let rowDualCol: YearTotalDualCol = retVal[i-maxRows];
+        const rowDualCol: YearTotalDualCol = retVal[i - maxRows];
         rowDualCol.annualIncomeRight = row.annualIncome;
         rowDualCol.remainingFundsRight = row.remainingFunds;
         rowDualCol.yearNumRight = row.yearNum;
       }
       else
       {
-        let rowDualCol: YearTotalDualCol = new YearTotalDualCol();
+        const rowDualCol: YearTotalDualCol = new YearTotalDualCol();
         rowDualCol.annualIncome = row.annualIncome;
         rowDualCol.remainingFunds = row.remainingFunds;
         rowDualCol.yearNum = row.yearNum;
@@ -133,8 +134,8 @@ export class InputFormComponent implements OnInit, OnDestroy {
     return retVal;
   }
 
-  windowClickHandle!: Subscription;
-  showHelp(e:Event): void{
+
+  showHelp(e: Event): void{
     if(!this.bShowHelp)  // Don't unset it as this is done by click anywhere
     {
       this.bShowHelp = !this.bShowHelp;
