@@ -2,38 +2,38 @@
 @include mat.core;
 
 // Basic colours used in theme
-$sec-cam-primary: mat.define-palette(mat.$light-green-palette);
-$sec-cam-accent: mat.define-palette(mat.$blue-palette);
-$sec-cam-warn: mat.define-palette(mat.$orange-palette);
+$dc-primary: mat.define-palette(mat.$light-green-palette);
+$dc-accent: mat.define-palette(mat.$blue-palette);
+$dc-warn: mat.define-palette(mat.$orange-palette);
 
 // Colours used for buttons and alter boxes.
-$sec-cam-danger: mat.define-palette(mat.$red-palette);
-$sec-cam-secondary: mat.define-palette(mat.$green-palette, 600);
-$sec-cam-light: mat.define-palette(mat.$yellow-palette, 400);
-$sec-cam-grey: mat.define-palette(mat.$grey-palette);
+$dc-danger: mat.define-palette(mat.$red-palette);
+$dc-secondary: mat.define-palette(mat.$green-palette, 600);
+$dc-light: mat.define-palette(mat.$yellow-palette, 400);
+$dc-grey: mat.define-palette(mat.$grey-palette);
 
-// All the following are defined from the sec-cam- group above
-$success-background: mat.get-color-from-palette($sec-cam-secondary, 100);
-$danger-background: mat.get-color-from-palette($sec-cam-danger, 200);
-$warn-background: mat.get-color-from-palette($sec-cam-warn, 100);
+// All the following are defined from the dc- group above
+$success-background: mat.get-color-from-palette($dc-secondary, 100);
+$danger-background: mat.get-color-from-palette($dc-danger, 200);
+$warn-background: mat.get-color-from-palette($dc-warn, 100);
 
-$success-colour: mat.get-contrast-color-from-palette($sec-cam-secondary, 400);
-$danger-colour:  mat.get-contrast-color-from-palette($sec-cam-danger, 400);
-$warn-colour: mat.get-contrast-color-from-palette($sec-cam-warn, 400);
+$success-colour: mat.get-contrast-color-from-palette($dc-secondary, 400);
+$danger-colour:  mat.get-contrast-color-from-palette($dc-danger, 400);
+$warn-colour: mat.get-contrast-color-from-palette($dc-warn, 400);
 
-$light-button-bkgnd: mat.get-color-from-palette($sec-cam-light, 400);
-$danger-button-bkgnd: mat.get-color-from-palette($sec-cam-danger, A700);
-$warn-button-bkgnd: mat.get-color-from-palette($sec-cam-warn,A400);
-$secondary-button-bkgnd: mat.get-color-from-palette($sec-cam-accent, 900);
-$default-button-bkgnd: mat.get-color-from-palette($sec-cam-grey, 500);
+$light-button-bkgnd: mat.get-color-from-palette($dc-light, 400);
+$danger-button-bkgnd: mat.get-color-from-palette($dc-danger, A700);
+$warn-button-bkgnd: mat.get-color-from-palette($dc-warn,A400);
+$secondary-button-bkgnd: mat.get-color-from-palette($dc-accent, 900);
+$default-button-bkgnd: mat.get-color-from-palette($dc-grey, 500);
 
-$light-button-colour: mat.get-contrast-color-from-palette($sec-cam-light, 900);
-$danger-button-colour: mat.get-contrast-color-from-palette($sec-cam-danger, 900);
-$warn-button-colour: mat.get-contrast-color-from-palette($sec-cam-warn, 400);
-$secondary-button-colour: mat.get-contrast-color-from-palette($sec-cam-accent, 500);
-$default-button-colour: mat.get-contrast-color-from-palette($sec-cam-grey, 500);
+$light-button-colour: mat.get-contrast-color-from-palette($dc-light, 900);
+$danger-button-colour: mat.get-contrast-color-from-palette($dc-danger, 900);
+$warn-button-colour: mat.get-contrast-color-from-palette($dc-warn, 400);
+$secondary-button-colour: mat.get-contrast-color-from-palette($dc-accent, 500);
+$default-button-colour: mat.get-contrast-color-from-palette($dc-grey, 500);
 
-$theme: mat.define-dark-theme((color: (primary: $sec-cam-primary, secondary: $sec-cam-secondary, accent: $sec-cam-accent, warn: $sec-cam-warn)));
+$theme: mat.define-dark-theme((color: (primary: $dc-primary, secondary: $dc-secondary, accent: $dc-accent, warn: $dc-warn)));
 
 $mat-theme-background: map-get($theme, background);
 $background-colour: mat.get-color-from-palette($mat-theme-background, background);
@@ -141,3 +141,14 @@ mat-card-content.wait-box {
 mat-card.hide-background {
   background-color: transparent;
 }
+
+// Colours for form fields filled in from previous values
+  //input:-webkit-autofill,
+  //input:-webkit-autofill:hover,
+  //input:-webkit-autofill:focus,
+  //input:-webkit-autofill:active {
+  //  //  -webkit-box-shadow: 0 0 0 30px mat-color($primary, A700) inset;
+  //  box-shadow: 0 0 0 30px mat.get-color-from-palette($dc-warn, 900) inset;
+  //  -webkit-text-fill-color: mat.get-color-from-palette($dc-primary, 100);
+  //}
+

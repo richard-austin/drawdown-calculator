@@ -1,10 +1,11 @@
+@use '~@angular/material' as mat;
 @import '../../../styles.scss';
 
 div.help-page
 {
-  max-width: 40rem;;
-  background-color: mat-color($primary, 400);
-  color: mat-color($primary, 100);
+  max-width: 40rem;
+  background-color: $background-colour;
+  color: mat.get-color-from-palette($dc-primary, 100);
   border-radius: 10px;
   font-size: small;
   font-weight: 100;
@@ -14,10 +15,6 @@ div.help-page
 
   -webkit-box-shadow: 5px 5px 17px 7px rgba(0,0,0,0.92);
   box-shadow: 5px 5px 17px 7px rgba(0,0,0,0.92);
-
-  >button.calc-button {
-    background-color: mat-color($primary, A400);
-  }
 
    >div>img
    {

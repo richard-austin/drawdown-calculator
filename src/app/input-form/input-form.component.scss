@@ -1,12 +1,14 @@
+@use '~@angular/material' as mat;
 @import "../../styles.scss";
 
 button {
   margin-right: 1rem;
-  &.calc-button {
-    background-color: mat-color($primary, A400);
-  }
 }
 
+mat-card {
+  height: fit-content;
+  margin: 1rem;
+}
 mat-form-field {
   width: 18rem;
 }
@@ -20,16 +22,8 @@ mat-form-field {
   }
 }
 
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  //  -webkit-box-shadow: 0 0 0 30px mat-color($primary, A700) inset;
-  box-shadow: 0 0 0 30px mat-color($primary, A700) inset;
-  -webkit-text-fill-color: mat-color($primary, 100);
-}
 .help-button {
-  color: mat-color($primary, 500);
+  color: mat.get-color-from-palette($dc-primary, 500);
   @media only screen and (max-width: 60rem) {
     margin-right: 0;
     width: 30px;
