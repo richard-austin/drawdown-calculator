@@ -1,5 +1,8 @@
+import jdk.tools.jlink.internal.JarArchive
+
 plugins {
     id "com.github.node-gradle.node" version "1.3.0"
+    id 'war'
 }
 
 node {
@@ -14,7 +17,7 @@ task bootRun(type: NpmTask, dependsOn: 'npmInstall') {
     args = ['run', 'start']
 }
 
-task test(type: NpmTask, dependsOn: 'npmInstall') {
+task unittests(type: NpmTask, dependsOn: 'npmInstall') {
     group = 'verification'
     description = 'Execute unit tests'
     args = ['run', 'test']
@@ -34,6 +37,13 @@ task buildClient(type: NpmTask, dependsOn: 'npmInstall') {
   group = 'build'
   description = 'Compile client side assets for production'
   args = ['run', 'build']
+}
+
+task buildWar(type: Exec, dependsOn: 'buildClient') {
+  group = 'build'
+  workingDir "$projectDir/dist/dc"
+  executable "sh"
+  args = ['-c', 'jar -cvf ../dc.war *']
 }
 
 task buildClientWatch(type: NpmTask, dependsOn: 'npmInstall') {
