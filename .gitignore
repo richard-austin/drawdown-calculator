@@ -46,3 +46,4 @@ testem.log
 Thumbs.db
 /.gradle/
 /gradle/
+/src/assets/version.txt

@@ -6,6 +6,7 @@ import {GraphingComponent} from "../graphing/graphing.component";
 import {tap} from "rxjs/operators";
 import {fromEvent, Subscription, timer} from "rxjs";
 import {YearTotal} from "../classes/YearTotal";
+import {VersionService} from '../version/version.service';
 
 @Component({
   selector: 'app-input-form',
@@ -37,8 +38,9 @@ export class InputFormComponent implements OnInit, OnDestroy {
   bSingleColumn: boolean = window.innerWidth < this.narrowWidth;
   bShowHelp: boolean = false;
   windowClickHandle!: Subscription;
+  version: string = 'Unknown';
 
-  constructor() { }
+  constructor(private versionService:VersionService) { }
 
  cancel() {
     this.drawdownDataDualCol = [];
@@ -165,6 +167,12 @@ export class InputFormComponent implements OnInit, OnDestroy {
 
       this.bSingleColumn = windowWidth < this.narrowWidth;
     });
+
+    this.versionService.getVersion().subscribe((result: ArrayBuffer) => {
+
+      let dec = new TextDecoder("utf-8")
+      this.version = dec.decode(result);
+    })
   }
 
 

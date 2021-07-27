@@ -10,6 +10,9 @@
       <div></div>
       <app-help></app-help>
     </div>
+    <mat-card-subtitle>
+      Version: {{version}}
+    </mat-card-subtitle>
 
     <mat-card-content class="dc-input-form">
       <form (submit)="$event.preventDefault(); formSubmitted()" [formGroup]="drawDownDataForm">
