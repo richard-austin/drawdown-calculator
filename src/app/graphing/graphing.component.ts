@@ -2,7 +2,6 @@ import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChil
 import {YearTotal} from "../classes/YearTotal";
 import {GraphDimensions} from "../classes/GraphDimensions";
 import {fromEvent, Subscription, timer} from "rxjs";
-import { mixinColor } from '@angular/material/core';
 
 @Component({
   selector: 'app-graphing',
@@ -20,7 +19,6 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
   private graphCtx!: CanvasRenderingContext2D | null;
 
   private windowResizeHandle!: Subscription;
-  private narrowWidth: number = 700;
 
   readonly graphDimensions: GraphDimensions = new GraphDimensions({
     height: 400,
@@ -65,10 +63,11 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
     // Find maximum and minimum values of remaining funds and build a linear array from the dual column data
     let maxFunds = 0;
     let minFunds = 0;
-    let maxIncome = this.drawdownData[0].annualIncome;
-    let minIncome = maxIncome;
 
-    if (this.graphCtx) {
+    if (this.drawdownData && this.drawdownData[0] && this.graphCtx) {
+      let maxIncome = this.drawdownData[0].annualIncome;
+      let minIncome = maxIncome;
+
       // Find the max and min funds and income amounts
       this.drawdownData.forEach((yearTotal: YearTotal) => {
         if (yearTotal.remainingFunds > maxFunds)
@@ -255,7 +254,7 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.windowResizeHandle = fromEvent(window, 'resize').subscribe((e: Event) => {
+    this.windowResizeHandle = fromEvent(window, 'resize').subscribe(() => {
       this.draw();
     });
   }
