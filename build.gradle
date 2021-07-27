@@ -33,7 +33,7 @@ task buildClientDev(type: NpmTask, dependsOn: 'npmInstall') {
   args = ['run', 'buildDev']
 }
 
-task buildClient(type: NpmTask, dependsOn: 'npmInstall') {
+task buildClient(type: NpmTask, dependsOn: ['npmInstall', 'setVersion']) {
   group = 'build'
   description = 'Compile client side assets for production'
   args = ['run', 'build']
@@ -44,6 +44,14 @@ task buildWar(type: Exec, dependsOn: 'buildClient') {
   workingDir "$projectDir/dist/dc"
   executable "sh"
   args = ['-c', 'jar -cvf ../dc.war *']
+}
+
+task setVersion(type: Exec) {
+  group = 'build'
+  workingDir "$projectDir"
+  executable "sh"
+  args = ['-c', 'git describe --tags --dirty | tr -d \'\\n\' > src/assets/version.txt']
+  //commandLine './setVersion.sh'
 }
 
 task buildClientWatch(type: NpmTask, dependsOn: 'npmInstall') {

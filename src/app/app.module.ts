@@ -15,6 +15,7 @@ import { GraphingComponent } from './graphing/graphing.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { HelpComponent } from './input-form/help/help.component';
 import {MatIconModule} from '@angular/material/icon';
+import {HttpClientModule} from '@angular/common/http';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import {MatIconModule} from '@angular/material/icon';
     MatTableModule,
     MatCheckboxModule,
     MatIconModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
