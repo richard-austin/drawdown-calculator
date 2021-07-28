@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm /var/lib/tomcat9/webapps/dc.war || true
+rm -r /var/lib/tomcat9/webapps/dc || true
