@@ -27,7 +27,12 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
     leftBorder: 90,
     rightBorder: 70,
     bottomBorder: 60,
-    textHeight: 10
+    textHeight: 10,
+    xCalOffset: 4,
+    yCalOffsetAi: 4,
+    yCalOffsetRf: 4,
+    yOffsetBoxAi: 1,
+    yOffsetBoxRf: 10
   });
 
   yScale!: number;
@@ -137,22 +142,22 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.graphCtx.strokeStyle = '#f8f8f8';
       this.graphCtx.font = this.graphDimensions.textHeight + "px Arial";
       // x axis calibration
-      for (let i = 0; i <= years; i += 5) {
+      for (let i = 1; i <= years+1; i += i===1?4:5) {
         let x = i * this.xScale + this.xOffset;
         this.graphCtx.moveTo(x, this.graphDimensions.height - this.graphDimensions.bottomBorder);
         this.graphCtx.lineTo(x, this.graphDimensions.topBorder);
         let yearNum: string = i.toString();
-        this.graphCtx.fillText(yearNum, x - this.graphCtx.measureText(yearNum).width / 2, this.graphDimensions.height - this.graphDimensions.bottomBorder + this.graphDimensions.textHeight);
+        this.graphCtx.fillText(yearNum, x - this.graphCtx.measureText(yearNum).width / 2, this.graphDimensions.height - this.graphDimensions.bottomBorder + this.graphDimensions.textHeight+this.graphDimensions.xCalOffset);
       }
       this.graphCtx.stroke();
 
       // y axis calibration (funds)
       for (let i: number = 0; i <= maxFunds; i += maxFunds / 5) {
-        this.graphCtx.moveTo(this.graphDimensions.leftBorder, i * this.yScale + this.yOffset);
-        this.graphCtx.lineTo(this.graphDimensions.width - this.graphDimensions.rightBorder, i * this.yScale + this.yOffset);
+        this.graphCtx.moveTo(this.xScale + this.xOffset, i * this.yScale + this.yOffset);
+        this.graphCtx.lineTo(years * this.xScale + this.xOffset, i * this.yScale + this.yOffset);
         let textMetrics: TextMetrics = this.graphCtx.measureText(i.toFixed(1));
         let textWidth: number = textMetrics.width;
-        this.graphCtx.fillText(i.toFixed(0), this.graphDimensions.leftBorder - textWidth, i * this.yScale + this.yOffset + this.graphDimensions.textHeight / 2);
+        this.graphCtx.fillText(i.toFixed(0), this.xScale + this.xOffset - textWidth + this.graphDimensions.yCalOffsetRf, i * this.yScale + this.yOffset + this.graphDimensions.textHeight / 2);
       }
       // y axis left label (remaining funds)
       this.graphCtx.save();
@@ -166,7 +171,7 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // y axis calibration (Annual income)
       for (let i: number = 0, j: number = 0; j < 6; i += maxIncome / 5, ++j) {
-        this.graphCtx.fillText(i.toFixed(0), this.graphDimensions.width - this.graphDimensions.rightBorder, i * this.yScaleInc + this.yOffset + this.graphDimensions.textHeight / 2);
+        this.graphCtx.fillText(i.toFixed(0), this.graphDimensions.width - this.graphDimensions.rightBorder + this.graphDimensions.yCalOffsetAi, i * this.yScaleInc + this.yOffset + this.graphDimensions.textHeight / 2);
       }
 
       // y axis right label (annual income)
@@ -181,7 +186,7 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // x axis label
       this.graphCtx.save();
-      this.graphCtx.translate(this.graphDimensions.leftBorder + (this.graphDimensions.width - this.graphDimensions.leftBorder - this.graphDimensions.rightBorder) / 2, (this.graphDimensions.height - this.graphDimensions.bottomBorder / 2));
+      this.graphCtx.translate(this.xScale + this.xOffset + (this.graphDimensions.width - this.graphDimensions.leftBorder - this.graphDimensions.rightBorder) / 2, (this.graphDimensions.height - this.graphDimensions.bottomBorder / 2));
       //     this.graphCtx.rotate(-Math.PI / 2);
       this.graphCtx.textAlign = 'center';
       this.graphCtx.fillText("Year Number", 0, 0);
@@ -203,18 +208,18 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.annualIncomeBoxEl && !this.annualIncomeBox)
       this.annualIncomeBox = this.annualIncomeBoxEl.nativeElement;
 
-    let yearNum: number = Math.ceil((x/this.graphDimensions.scale - this.xOffset) / this.xScale);
+    let yearNum: number = Math.floor((x/this.graphDimensions.scale - this.xOffset) / this.xScale);
 
-    if (yearNum >= 0 && yearNum < 40) {
+    if (yearNum >= 1 && yearNum <= 40) {
       // Remaining funds floating box
       this.remainingFundsBox.style.visibility = 'visible';
       //this.remainingFundsBox.style.top
       this.yearNum = yearNum;
-      this.remainingFunds = this.drawdownData[yearNum].remainingFunds.toFixed(2);
+      this.remainingFunds = this.drawdownData[yearNum-1]?.remainingFunds.toFixed(2);
       let rfbRect: DOMRect = this.remainingFundsBox.getBoundingClientRect();
       let rfbWidth: number = rfbRect.width;
       let padding = 3.2;
-      this.remainingFundsBox.style.top = (this.drawdownData[yearNum].remainingFunds * this.yScale*this.graphDimensions.scale + this.yOffset*this.graphDimensions.scale - this.graphDimensions.height*this.graphDimensions.scale).toString() + 'px';
+      this.remainingFundsBox.style.top = (this.drawdownData[yearNum-1]?.remainingFunds * this.yScale*this.graphDimensions.scale + this.yOffset*this.graphDimensions.scale - this.graphDimensions.height*this.graphDimensions.scale+this.graphDimensions.yOffsetBoxRf).toString() + 'px';
 
       // Centre the pointer on top of the box
       (<HTMLDivElement>this.remainingFundsBox.children[0]).style.left = (rfbWidth / 2 - padding).toString() + 'px';
@@ -224,18 +229,20 @@ export class GraphingComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // Annual income floating box
       this.annualIncomeBox.style.visibility = 'visible';
-      this.annualIncome = this.drawdownData[yearNum].annualIncome.toFixed(2);
+      this.annualIncome = this.drawdownData[yearNum-1].annualIncome.toFixed(2);
       rfbRect = this.annualIncomeBox.getBoundingClientRect();
       rfbWidth = rfbRect.width;
-      this.annualIncomeBox.style.top = (this.drawdownData[yearNum].annualIncome * this.yScaleInc*this.graphDimensions.scale + this.yOffset*this.graphDimensions.scale - this.graphDimensions.height*this.graphDimensions.scale).toString() + 'px';
+      this.annualIncomeBox.style.top = (this.drawdownData[yearNum-1].annualIncome * this.yScaleInc*this.graphDimensions.scale + this.yOffset*this.graphDimensions.scale - this.graphDimensions.height*this.graphDimensions.scale+this.graphDimensions.yOffsetBoxAi).toString() + 'px';
 
       // Centre the pointer on top of the box
       (<HTMLDivElement>this.annualIncomeBox.children[0]).style.left = (rfbWidth / 2 - padding).toString() + 'px';
 
       // Set the box so its horizontal centre lines up with the x position
       this.annualIncomeBox.style.left = (x - this.annualIncomeBox.clientWidth / 2 - padding).toString() + 'px';
-    } else
-      this.remainingFundsBox.style.visibility = 'hidden';
+     }
+    // else {
+    //   this.annualIncomeBox.style.visibility = this.remainingFundsBox.style.visibility = 'hidden';
+    // }
   }
 
   figuresOff(): void {

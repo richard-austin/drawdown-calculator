@@ -66,16 +66,17 @@ export class InputFormComponent implements OnInit, OnDestroy {
     // Build the drawdown data array
     this.drawdownData = [];
     for (let i = 0; i < totalYears; ++i) {
+      this.depreciateOneYear();
       if (this.fundAmount > 0) {
         this.drawdownData.push(new YearTotal({
-          yearNum: i,
+          yearNum: i+1,
           remainingFunds: this.fundAmount,
           annualIncome: this.drawdownAmount > this.fundAmount ? this.fundAmount : this.drawdownAmount
         }));
       } else {
-        this.drawdownData.push(new YearTotal({yearNum: i, remainingFunds: 0, annualIncome: 0}));
+        this.drawdownData.push(new YearTotal({yearNum: i+1, remainingFunds: 0, annualIncome: 0}));
       }
-      this.depreciateOneYear();
+      this.applyAnnualIncreaseToDrawdown();
     }
 
     // Build the drawdown data array for the dual column table
@@ -93,11 +94,18 @@ export class InputFormComponent implements OnInit, OnDestroy {
     let monthlyFundGrowth: number = Math.pow((1 + this.expectedAnnualFundGrowth / 100), 1 / 12);
     let monthlyDrawdown: number = this.drawdownAmount / 12;
 
+    // Apply growth month by month with monthly drawdown at 1/12 of the annual rate for the current year
     for (let i = 0; i < 12; ++i) {
       this.fundAmount = this.fundAmount * monthlyFundGrowth;
       this.fundAmount -= monthlyDrawdown;
     }
+  }
 
+  /**
+   * applyAnnualIncreaseToDrawdown: Increase the annual drawdown amount by the required amount
+   */
+  applyAnnualIncreaseToDrawdown()
+  {
     // Increase by the expected annual income growth
     this.drawdownAmount += this.drawdownAmount * this.requiredAnnualIncomeGrowth / 100;
   }
@@ -142,7 +150,7 @@ export class InputFormComponent implements OnInit, OnDestroy {
     {
       this.bShowHelp = !this.bShowHelp;
       e.cancelBubble = true;
-      this.windowClickHandle = fromEvent(window, 'click').subscribe((e:Event) => {
+      this.windowClickHandle = fromEvent(window, 'click').subscribe(() => {
         if(this.bShowHelp)  // Only used to unset show help, click on the button to show it.
           this.bShowHelp = !this.bShowHelp;
         this.windowClickHandle?.unsubscribe();
