@@ -46,6 +46,12 @@ task buildWar(type: Exec, dependsOn: 'buildClient') {
   args = ['-c', 'jar -cvf ../dc.war *']
 }
 
+task buildDebFile(type: Exec, dependsOn: ['buildWar']) {
+  group = 'build'
+  workingDir "$projectDir/deb-file-creation"
+  commandLine './create-deb.sh'
+}
+
 task setVersion(type: Exec) {
   group = 'build'
   workingDir "$projectDir"
