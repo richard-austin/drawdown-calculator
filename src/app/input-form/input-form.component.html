@@ -20,7 +20,7 @@
           <mat-label>
             Fund Amount
           </mat-label>
-          <input title="Your pension pot value after lump sum deducted" matInput #fundAmount
+          <input autocomplete="off" title="Your pension pot value after lump sum deducted" matInput #fundAmount
                  formControlName="fundAmount">
           <mat-error *ngIf="hasError('fundAmount', 'required')">Fund Amount is required</mat-error>
           <mat-error *ngIf="hasError('fundAmount', 'min')">Fund value should be greater than zero</mat-error>
@@ -31,7 +31,7 @@
           <mat-label>
             Annual Drawdown Amount
           </mat-label>
-          <input title="Annual income you wish to take" matInput #drawdownAmount formControlName="drawdownAmount">
+          <input autocomplete="off" title="Annual income you wish to take" matInput #drawdownAmount formControlName="drawdownAmount">
           <mat-error *ngIf="hasError('drawdownAmount', 'required')">Drawdown Amount is required</mat-error>
           <mat-error *ngIf="hasError('drawdownAmount', 'pattern')">Drawdown Amount should be a number</mat-error>
         </mat-form-field>
@@ -40,7 +40,7 @@
           <mat-label>
             Expected Average Annual Fund Growth (%)
           </mat-label>
-          <input title="Estimated annual growth of your pension fund" matInput #expectedAnnualFundGrowth
+          <input autocomplete="off" title="Estimated annual growth of your pension fund" matInput #expectedAnnualFundGrowth
                  formControlName="expectedAnnualFundGrowth">
 
           <mat-error *ngIf="hasError('expectedAnnualFundGrowth', 'required')">Expected Annual Fund Growth is required
@@ -54,7 +54,7 @@
           <mat-label>
             Required Annual Income Growth (%)
           </mat-label>
-          <input title="Required annual increase in your drawdown income" matInput #requiredAnnualIncomeGrowth
+          <input autocomplete="off" title="Required annual increase in your drawdown income" matInput #requiredAnnualIncomeGrowth
                  formControlName="requiredAnnualIncomeGrowth">
           <mat-error *ngIf="hasError('requiredAnnualIncomeGrowth', 'required')">Required Annual Income Growth is
             required
