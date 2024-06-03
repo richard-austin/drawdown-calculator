@@ -16,19 +16,29 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+## Build 
+```bash
+./gradlew buildDebFile
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## Install from deb file
+The deb file installation requires Ubuntu 24.04 and has tomcat10 as a dependency. 
 
-The build script build.sh will run a production build with the base url set to dc and package the application in dc.war for deployment.
-## Running unit tests
+The deb file produced by the build will be at ***[YOUR_HOME_DIR]***/drawdown-calculator/deb-file-creation.
+The name will be similar to dc_2.1.0_arm64.deb.
+Copy it to your Ubuntu ARM64 machine (i.e. Raspberry pi).
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+On the Raspberry pi, Install from the .deb file
+```bash
+sudo apt install ./dc_2.1.0_arm64.deb
+```
+Tomcat 10 will start 
 
-## Running end-to-end tests
+The Drawdown Calculator can be accessed at http://***[server ip address]***:8080/dc
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
+## Install war.file
+To use with other Tomcat versions, just copy the file dc.war 
+(at ***[YOUR_HOME_DIR]***/drawdown-calculator/dist) to the tomcat webapps folder.
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.

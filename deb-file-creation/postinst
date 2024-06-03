@@ -1,8 +1,8 @@
 #!/bin/bash
 
-mv /tmp/dc.war /var/lib/tomcat9/webapps/dc.war
-rm -r /var/lib/tomcat9/webapps/dc || true
+rm -r /var/lib/tomcat10/webapps/dc || true
+mv /tmp/dc.war /var/lib/tomcat10/webapps/dc.war
 
-chown tomcat:tomcat /var/lib/tomcat9/webapps/dc.war
-deb-systemd-invoke enable tomcat9.service
-deb-systemd-invoke start tomcat9.service
+chown tomcat:tomcat /var/lib/tomcat10/webapps/dc.war
+deb-systemd-invoke enable tomcat10.service
+deb-systemd-invoke start tomcat10.service
