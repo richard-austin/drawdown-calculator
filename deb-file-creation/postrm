@@ -1,4 +1,4 @@
 #!/bin/bash
 
-rm /var/lib/tomcat9/webapps/dc.war || true
-rm -r /var/lib/tomcat9/webapps/dc || true
+rm /var/lib/tomcat10/webapps/dc.war || true
+rm -r /var/lib/tomcat10/webapps/dc || true
